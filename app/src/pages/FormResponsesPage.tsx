@@ -27,7 +27,7 @@ export default function FormResponsesPage() {
     try {
       const records = await pb.collection("students").getFullList<Student>({
         sort: "-created",
-        filter: "formData != ''",
+        filter: "formData != null",
       })
       setResponses(records)
     } catch (e) {
