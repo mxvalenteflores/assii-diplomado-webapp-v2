@@ -39,7 +39,9 @@ curl -s -X PATCH "$PB/api/collections/pbc_2862470677" -H "$AUTH" -H "Content-Typ
     {"name":"modality","type":"text","required":false},
     {"name":"duration","type":"text","required":false},
     {"name":"dates","type":"text","required":false},
-    {"name":"investment","type":"number","required":false}
+    {"name":"investment","type":"number","required":false},
+    {"hidden":false,"id":"autodate2990389176","name":"created","onCreate":true,"onUpdate":false,"presentable":false,"system":false,"type":"autodate"},
+    {"hidden":false,"id":"autodate3332085495","name":"updated","onCreate":true,"onUpdate":true,"presentable":false,"system":false,"type":"autodate"}
   ]}' > /dev/null 2>&1
 
 # forms
@@ -49,7 +51,9 @@ curl -s -X PATCH "$PB/api/collections/pbc_913941788" -H "$AUTH" -H "Content-Type
     {"name":"title","type":"text","required":true},
     {"name":"diplomadoId","type":"text","required":false},
     {"name":"isActive","type":"bool","required":false},
-    {"name":"fields","type":"json","required":false}
+    {"name":"fields","type":"json","required":false},
+    {"hidden":false,"id":"autodate_f1","name":"created","onCreate":true,"onUpdate":false,"presentable":false,"system":false,"type":"autodate"},
+    {"hidden":false,"id":"autodate_u1","name":"updated","onCreate":true,"onUpdate":true,"presentable":false,"system":false,"type":"autodate"}
   ]}' > /dev/null 2>&1
 
 # students
@@ -57,7 +61,9 @@ curl -s -X PATCH "$PB/api/collections/pbc_3827815851" -H "$AUTH" -H "Content-Typ
   -d '{"fields":[
     {"autogeneratePattern":"[a-z0-9]{15}","hidden":false,"id":"text3208210256","max":15,"min":15,"name":"id","pattern":"^[a-z0-9]+$","presentable":false,"primaryKey":true,"required":true,"system":true,"type":"text"},
     {"name":"email","type":"email"},{"name":"firstName","type":"text"},{"name":"lastName","type":"text"},
-    {"name":"phone","type":"text"},{"name":"empresa","type":"text"},{"name":"puesto","type":"text"}
+    {"name":"phone","type":"text"},{"name":"empresa","type":"text"},{"name":"puesto","type":"text"},
+    {"hidden":false,"id":"autodate_f2","name":"created","onCreate":true,"onUpdate":false,"presentable":false,"system":false,"type":"autodate"},
+    {"hidden":false,"id":"autodate_u2","name":"updated","onCreate":true,"onUpdate":true,"presentable":false,"system":false,"type":"autodate"}
   ]}' > /dev/null 2>&1
 
 # enrollments
@@ -65,7 +71,9 @@ curl -s -X PATCH "$PB/api/collections/pbc_1009377862" -H "$AUTH" -H "Content-Typ
   -d '{"fields":[
     {"autogeneratePattern":"[a-z0-9]{15}","hidden":false,"id":"text3208210256","max":15,"min":15,"name":"id","pattern":"^[a-z0-9]+$","presentable":false,"primaryKey":true,"required":true,"system":true,"type":"text"},
     {"name":"studentId","type":"text"},{"name":"diplomadoId","type":"text"},
-    {"name":"status","type":"text"},{"name":"paymentAmount","type":"number"}
+    {"name":"status","type":"text"},{"name":"paymentAmount","type":"number"},
+    {"hidden":false,"id":"autodate_f3","name":"created","onCreate":true,"onUpdate":false,"presentable":false,"system":false,"type":"autodate"},
+    {"hidden":false,"id":"autodate_u3","name":"updated","onCreate":true,"onUpdate":true,"presentable":false,"system":false,"type":"autodate"}
   ]}' > /dev/null 2>&1
 
 # payments
@@ -74,7 +82,9 @@ curl -s -X PATCH "$PB/api/collections/pbc_631030571" -H "$AUTH" -H "Content-Type
     {"autogeneratePattern":"[a-z0-9]{15}","hidden":false,"id":"text3208210256","max":15,"min":15,"name":"id","pattern":"^[a-z0-9]+$","presentable":false,"primaryKey":true,"required":true,"system":true,"type":"text"},
     {"name":"proof","type":"file","required":false,"options":{"mimeTypes":["image/jpeg","image/png","image/webp","application/pdf"],"maxSelect":1,"maxSize":5242880,"protected":false}},
     {"name":"amount","type":"number"},{"name":"status","type":"text"},
-    {"name":"enrollmentId","type":"text"},{"name":"rejectionReason","type":"text"}
+    {"name":"enrollmentId","type":"text"},{"name":"rejectionReason","type":"text"},
+    {"hidden":false,"id":"autodate_f4","name":"created","onCreate":true,"onUpdate":false,"presentable":false,"system":false,"type":"autodate"},
+    {"hidden":false,"id":"autodate_u4","name":"updated","onCreate":true,"onUpdate":true,"presentable":false,"system":false,"type":"autodate"}
   ]}' > /dev/null 2>&1
 
 # classes
@@ -82,21 +92,27 @@ curl -s -X PATCH "$PB/api/collections/pbc_2478702895" -H "$AUTH" -H "Content-Typ
   -d '{"fields":[
     {"autogeneratePattern":"[a-z0-9]{15}","hidden":false,"id":"text3208210256","max":15,"min":15,"name":"id","pattern":"^[a-z0-9]+$","presentable":false,"primaryKey":true,"required":true,"system":true,"type":"text"},
     {"name":"title","type":"text"},{"name":"description","type":"text"},
-    {"name":"datetime","type":"date"},{"name":"meetingUrl","type":"url"},{"name":"diplomadoId","type":"text"}
+    {"name":"datetime","type":"date"},{"name":"meetingUrl","type":"url"},{"name":"diplomadoId","type":"text"},
+    {"hidden":false,"id":"autodate_f5","name":"created","onCreate":true,"onUpdate":false,"presentable":false,"system":false,"type":"autodate"},
+    {"hidden":false,"id":"autodate_u5","name":"updated","onCreate":true,"onUpdate":true,"presentable":false,"system":false,"type":"autodate"}
   ]}' > /dev/null 2>&1
 
 # recordings
 curl -s -X PATCH "$PB/api/collections/pbc_392670462" -H "$AUTH" -H "Content-Type: application/json" \
   -d '{"fields":[
     {"autogeneratePattern":"[a-z0-9]{15}","hidden":false,"id":"text3208210256","max":15,"min":15,"name":"id","pattern":"^[a-z0-9]+$","presentable":false,"primaryKey":true,"required":true,"system":true,"type":"text"},
-    {"name":"title","type":"text"},{"name":"url","type":"url"},{"name":"classId","type":"text"}
+    {"name":"title","type":"text"},{"name":"url","type":"url"},{"name":"classId","type":"text"},
+    {"hidden":false,"id":"autodate_f6","name":"created","onCreate":true,"onUpdate":false,"presentable":false,"system":false,"type":"autodate"},
+    {"hidden":false,"id":"autodate_u6","name":"updated","onCreate":true,"onUpdate":true,"presentable":false,"system":false,"type":"autodate"}
   ]}' > /dev/null 2>&1
 
 # form_responses
 curl -s -X PATCH "$PB/api/collections/pbc_1739871503" -H "$AUTH" -H "Content-Type: application/json" \
   -d '{"fields":[
     {"autogeneratePattern":"[a-z0-9]{15}","hidden":false,"id":"text3208210256","max":15,"min":15,"name":"id","pattern":"^[a-z0-9]+$","presentable":false,"primaryKey":true,"required":true,"system":true,"type":"text"},
-    {"name":"studentId","type":"text"},{"name":"formId","type":"text"},{"name":"data","type":"json"}
+    {"name":"studentId","type":"text"},{"name":"formId","type":"text"},{"name":"data","type":"json"},
+    {"hidden":false,"id":"autodate_f7","name":"created","onCreate":true,"onUpdate":false,"presentable":false,"system":false,"type":"autodate"},
+    {"hidden":false,"id":"autodate_u7","name":"updated","onCreate":true,"onUpdate":true,"presentable":false,"system":false,"type":"autodate"}
   ]}' > /dev/null 2>&1
 
 echo "Fields added."
