@@ -14,7 +14,7 @@ function sendEmail(to, subject, text, html) {
   try {
     const payload = { to, subject, text: text || "" }
     if (html) payload.html = html
-    const resp = $http.send({
+    $http.send({
       url: `https://api.agentmail.to/v0/inboxes/${inbox}/messages/send`,
       method: "POST",
       headers: {
@@ -22,11 +22,10 @@ function sendEmail(to, subject, text, html) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
-      timeout: 15,
     })
-    console.log("[EMAIL SENT]", to, resp.statusCode)
+    console.log("[EMAIL SENT]", to)
   } catch (e) {
-    console.error("[EMAIL ERROR]", to, e)
+    console.error("[EMAIL ERROR]", to, String(e))
   }
 }
 
