@@ -3,22 +3,28 @@
 console.log("[HOOKS] Loading email hooks...")
 
 function getPaymentInfo(scheme) {
-  var s = scheme || ""
-  if (s.indexOf("Pago unico - Publico General") !== -1) return { name: "Pago único - Público General", amount: "$9,000.00 MXN", type: "unico" }
-  if (s.indexOf("Pago unico - Comunidad ASSII") !== -1) return { name: "Pago único - Comunidad ASSII", amount: "$7,000.00 MXN", type: "unico" }
-  if (s.indexOf("6 Meses sin intereses - Publico General") !== -1 || s.indexOf("6 Meses - Publico General") !== -1) return { name: "6 Meses sin intereses - Público General", amount: "$1,667.00 MXN mensuales", type: "parcialidades" }
-  if (s.indexOf("6 meses sin intereses - Comunidad ASSII") !== -1 || s.indexOf("6 Meses - Comunidad ASSII") !== -1) return { name: "6 Meses sin intereses - Comunidad ASSII", amount: "$1,250.00 MXN mensuales", type: "parcialidades" }
-  return { name: scheme || "No especificado", amount: "Consultar", type: "consultar" }
+  var s = (scheme || "").toLowerCase()
+  if (s.indexOf("pago unico - publico") !== -1 || s.indexOf("pago único - público") !== -1) return { name: "Pago único - Público General", amount: "$9,000.00 MXN", type: "unico", link: "" }
+  if (s.indexOf("pago unico - comunidad") !== -1 || s.indexOf("pago único - comunidad") !== -1) return { name: "Pago único - Comunidad ASSII", amount: "$7,000.00 MXN", type: "unico", link: "" }
+  if (s.indexOf("6 meses") !== -1 && s.indexOf("publico") !== -1 || s.indexOf("público general") !== -1) return { name: "6 Meses sin intereses - Público General", amount: "$1,667.00 MXN mensuales", type: "parcialidades", link: "https://mpago.la/2ASRrNs" }
+  if (s.indexOf("6 meses") !== -1 && s.indexOf("assii") !== -1) return { name: "6 Meses sin intereses - Comunidad ASSII", amount: "$1,250.00 MXN mensuales", type: "parcialidades", link: "https://mpago.la/23bhuAu" }
+  return { name: scheme || "No especificado", amount: "Consultar", type: "consultar", link: "" }
 }
 
 function buildWelcomeEmail(name, paymentInfo) {
   var n = (name || "Participante").replace(/</g, "&lt;")
   var pn = paymentInfo.name.replace(/</g, "&lt;")
   var pa = paymentInfo.amount.replace(/</g, "&lt;")
+  var link = paymentInfo.link || ""
 
   var tipoPagoText = paymentInfo.type === "unico"
     ? "<p style=\"color:#374151;font-size:14px;line-height:1.6;margin:0 0 8px\"><strong>Pagos Únicos:</strong> Deberán ser cubiertos en su totalidad a más tardar 3 días hábiles antes del inicio del Diplomado para garantizar su acceso a la plataforma.</p>"
-    : "<p style=\"color:#374151;font-size:14px;line-height:1.6;margin:0 0 8px\"><strong>Esquema de Parcialidades (6 meses):</strong></p><p style=\"color:#374151;font-size:14px;line-height:1.6;margin:0 0 8px\">El primer pago (Inscripción/Mensualidad 1) debe realizarse antes del inicio del Diplomado.</p><p style=\"color:#374151;font-size:14px;line-height:1.6;margin:0 0 8px\">Las 5 parcialidades restantes deberán cubrirse durante los primeros 5 días naturales de cada mes subsecuente.</p>"
+    : "<p style=\"color:#374151;font-size:14px;line-height:1.6;margin:0 0 8px\"><strong>Esquema de Parcialidades (6 meses):</strong></p><p style=\"color:#374151;font-size:14px;line-height:1.6;margin:0 0 8px\">El primer pago (Inscripción/Mensualidad 1) debe realizarse antes del inicio del Diplomado.</p><p style=\"color:#374151;font-size:14px;line-height:1.6;margin:0 0 8px\">Las 3 parcialidades restantes deberán cubrirse durante los primeros 5 días naturales de cada mes subsecuente.</p>"
+
+  var linkHtml = ""
+  if (link) {
+    linkHtml = "<p style=\"color:#374151;font-size:14px;line-height:1.6;margin:0 0 8px\"><strong>Link de pago:</strong> <a href=\"" + link + "\" style=\"color:#1e40af;font-weight:600\">" + link + "</a></p>"
+  }
 
   return "<!DOCTYPE html><html lang=\"es\"><head><meta charset=\"UTF-8\"></head>" +
 "<body style=\"margin:0;padding:0;background-color:#f4f6fa;font-family:Arial,Helvetica,sans-serif\">" +
@@ -45,6 +51,7 @@ function buildWelcomeEmail(name, paymentInfo) {
 "<p style=\"color:#0369a1;font-size:15px;font-weight:700;margin:0 0 8px\">I. Términos y Condiciones de Inversión</p>" +
 "<p style=\"color:#374151;font-size:14px;line-height:1.6;margin:0 0 8px\">De acuerdo con su registro, su esquema de inversión elegido es: <strong style=\"color:#1e40af\">" + pn + "</strong> por un monto de <strong style=\"color:#1e40af\">" + pa + "</strong>.</p>" +
 tipoPagoText +
+linkHtml +
 "<p style=\"color:#374151;font-size:14px;line-height:1.6;margin:0\"><strong>Nota de cumplimiento:</strong> El atraso en el pago de una parcialidad causará la suspensión temporal del acceso a las sesiones sincrónicas y al material del diplomado hasta regularizar el estatus.</p>" +
 "</td></tr></table>" +
 
