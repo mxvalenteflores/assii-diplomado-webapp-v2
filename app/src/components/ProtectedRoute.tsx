@@ -1,9 +1,9 @@
-import { Navigate } from "react-router-dom"
+import { Navigate, Outlet } from "react-router-dom"
 import { pb } from "../lib/pb"
 
-export function ProtectedRoute({ children }: { children: React.ReactNode }) {
+export function ProtectedRoute() {
   if (!pb.authStore.isValid) {
     return <Navigate to="/login" replace />
   }
-  return <>{children}</>
+  return <Outlet />
 }

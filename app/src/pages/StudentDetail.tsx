@@ -211,17 +211,10 @@ export default function StudentDetail() {
   if (!enrollment) return null
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b border-border bg-white px-6 py-4">
-        <div className="mx-auto flex max-w-6xl items-center justify-between">
-          <Link to="/dashboard" className="text-sm text-muted-foreground hover:text-foreground">
-            ← Volver a estudiantes
-          </Link>
-          <span className="text-sm text-muted-foreground">{pb.authStore.record?.email}</span>
-        </div>
-      </header>
-
-      <main className="mx-auto max-w-6xl p-6">
+    <div>
+      <Link to="/dashboard/students" className="mb-6 inline-block text-sm text-muted-foreground hover:text-foreground">
+        ← Volver a estudiantes
+      </Link>
         <div className="mb-8">
           <h1 className="font-sora text-2xl font-bold">
             {student ? `${student.firstName} ${student.lastName}` : "Estudiante"}
@@ -387,7 +380,6 @@ export default function StudentDetail() {
             ))
           )}
         </div>
-      </main>
 
       {showPaymentModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">

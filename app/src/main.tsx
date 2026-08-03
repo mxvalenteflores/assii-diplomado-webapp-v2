@@ -6,7 +6,9 @@ import "./index.css"
 
 import { ProtectedRoute } from "./components/ProtectedRoute"
 import Login from "./pages/Login"
-import Dashboard from "./pages/Dashboard"
+import DashboardLayout from "./pages/DashboardLayout"
+import FormResponsesPage from "./pages/FormResponsesPage"
+import StudentsPage from "./pages/StudentsPage"
 import StudentDetail from "./pages/StudentDetail"
 import ClassesPage from "./pages/ClassesPage"
 import FormPage from "./pages/FormPage"
@@ -18,30 +20,15 @@ createRoot(document.getElementById("root")!).render(
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/forms/:diplomado" element={<FormPage />} />
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/students/:enrollmentId"
-          element={
-            <ProtectedRoute>
-              <StudentDetail />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/classes"
-          element={
-            <ProtectedRoute>
-              <ClassesPage />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/dashboard" element={<ProtectedRoute />}>
+          <Route element={<DashboardLayout />}>
+            <Route index element={<Navigate to="/dashboard/responses" replace />} />
+            <Route path="responses" element={<FormResponsesPage />} />
+            <Route path="students" element={<StudentsPage />} />
+            <Route path="students/:enrollmentId" element={<StudentDetail />} />
+            <Route path="classes" element={<ClassesPage />} />
+          </Route>
+        </Route>
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>
