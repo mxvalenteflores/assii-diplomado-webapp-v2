@@ -13,7 +13,7 @@ RUN curl -L -o /tmp/pb.zip "https://github.com/pocketbase/pocketbase/releases/do
   && chmod +x /pb/pocketbase
 
 FROM alpine:3.20
-RUN apk add --no-cache ca-certificates curl
+RUN apk add --no-cache ca-certificates curl python3
 
 # Install Litestream for SQLite backups
 ENV LITESTREAM_VERSION=0.3.13
@@ -28,7 +28,8 @@ COPY pb_hooks/ /pb/pb_hooks/
 COPY pb_migrations/ /pb/pb_migrations/
 COPY litestream.yml /pb/litestream.yml
 COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+COPY seed.sh /sh/seed.sh
+RUN chmod +x /entrypoint.sh /sh/seed.sh
 
 ENV AGENTMAIL_API_KEY=am_us_1a96c3614432092d8f4569675a8fa30d6ad80eaef38843433a3f06426bbb51f2
 
