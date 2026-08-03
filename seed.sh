@@ -113,6 +113,13 @@ if [ -n "$OLD_FR_ID" ]; then
   curl -s -X DELETE "$PB/api/collections/$OLD_FR_ID" -H "$AUTH" > /dev/null 2>&1
 fi
 
+# Create registrations collection if not exists
+REG_EXISTS=$(curl -s "$PB/api/collections" -H "$AUTH" | python3 -c "import sys,json; items=[c for c in json.load(sys.stdin).get('items',[]) if c['name']=='registrations']; print('yes' if items else '')" 2>/dev/null)
+if [ -z "$REG_EXISTS" ]; then
+  curl -s -X POST "$PB/api/collections" -H "$AUTH" -H "Content-Type: application/json" \
+    -d '{"name":"registrations","type":"base","createRule":"","listRule":"@request.auth.id != \"\"","viewRule":"@request.auth.id != \"\"","updateRule":"@request.auth.id != \"\"","deleteRule":"@request.auth.id != \"\"","fields":[{"autogeneratePattern":"[a-z0-9]{15}","hidden":false,"id":"text_reg1","max":15,"min":15,"name":"id","pattern":"^[a-z0-9]+$","presentable":false,"primaryKey":true,"required":true,"system":true,"type":"text"},{"name":"studentId","type":"text"},{"name":"formId","type":"text"},{"name":"data","type":"text"}]}' > /dev/null 2>&1
+fi
+
 echo "Fields added."
 
 # --- 3. Create admin user ---
