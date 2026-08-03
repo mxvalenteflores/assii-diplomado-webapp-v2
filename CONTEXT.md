@@ -6,6 +6,7 @@
 > status: vivo
 
 ## Ultimos cambios
+- 2026-08-03 09:30 — **Persistence fix.** Data survives redeploys. Litestream auto-restore (R2 backup) + seed adds created/updated autodate fields on startup. `getFullList` replaced with `getList` to bypass PocketBase `skipTotal=1` 400 bug. Toast errors removed on page load.
 - 2026-08-03 06:00 — R2 file storage configurado en PocketBase (Settings > Files). Litestream integrado en Dockerfile (backups cada 15min a R2, retention 30d).
 - 2026-08-03 06:00 — Campo `proof` (file) agregado a coleccion payments via PocketBase Admin API. Frontend actualizado (proofUrl -> proof).
 - 2026-08-03 05:58 — Toggle de visibilidad de contraseña en login agregado.
@@ -13,6 +14,22 @@
 - 2026-08-03 02:24 — Schema + seed local. pb_migrations commit.
 - 2026-08-03 02:11 — Scaffolding Vite+React+Tailwind+Router, Dockerfile, hooks AgentMail.
 - 2026-08-03 01:52 — DNS portal.diplomadosassii.site creado. Repo GitHub privado.
+
+## Architecture decisions
+### Persistencia de datos
+- **Litestream restore al arrancar**: entrypoint.sh borra DB local, restaura desde backup R2.
+  Si no hay backup, el seed crea datos iniciales (admin, diplomado, form).
+- **Litestream replicate continuo**: backups incrementales cada 5 min a R2, snapshots cada 4h.
+- **Volumen pb_data**: Coolify preserva el volumen entre deploys (verificado con 3 redeploys).
+  El restore de Litestream es safety net por si el volumen se pierde.
+- **Seed script**: python3 añade campos `created`/`updated` (autodate) a todas las colecciones
+  si no existen. Esto corrige DBs creadas antes de que las migraciones los incluyeran.
+
+### PocketBase SDK bugs workaround
+- `pb.collection().getFullList()` añade `skipTotal=1` que PocketBase v0.39.10 rechaza con 400.
+  Workaround: usar `getList(1, 1000, {...})` en todo el frontend.
+- Colecciones creadas via API POST después de inserts se corrompen (bug v0.39.10).
+  Workaround: formulario guarda respuestas en `students.formData` en vez de colección separada.
 
 ## Credenciales (sin valores)
 - coolify: pass coolify/api-token
@@ -31,3 +48,10 @@
 ## Pendientes
 - Dashboard de estudiantes (futuro)
 - Crear nuevo diplomado/forms (proximo ciclo)
+
+## Para retomar
+1. `cd /root/projects-clients/assii/diplomado1/appv2 && docker compose up -d`
+2. `cd app && npm run dev` (frontend en http://localhost:5173)
+3. Login admin: https://portal.diplomadosassii.site/login (arqonlabshq@gmail.com / #Arqon.app.001)
+4. Admin UI PocketBase: https://portal.diplomadosassii.site/_/
+5. Formulario publico: https://portal.diplomadosassii.site/forms/competencias-gerenciales-sst
