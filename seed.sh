@@ -114,10 +114,10 @@ if [ -n "$OLD_FR_ID" ]; then
 fi
 
 # Create submissions collection if not exists
-SUBS_EXISTS=$(curl -s "$PB/api/collections" -H "$AUTH" | python3 -c "import sys,json; items=[c for c in json.load(sys.stdin).get('items',[]) if c['name']=='submissions']; print('yes' if items else '')" 2>/dev/null)
+SUBS_EXISTS=$(curl -s "$PB/api/collections" -H "$AUTH" | python3 -c "import sys,json; items=[c for c in json.load(sys.stdin).get('items',[]) if c['name']=='form_submissions']; print('yes' if items else '')" 2>/dev/null)
 if [ -z "$SUBS_EXISTS" ]; then
   curl -s -X POST "$PB/api/collections" -H "$AUTH" -H "Content-Type: application/json" \
-    -d '{"name":"submissions","type":"base","createRule":"","listRule":"@request.auth.id != \"\"","viewRule":"@request.auth.id != \"\"","updateRule":"@request.auth.id != \"\"","deleteRule":"@request.auth.id != \"\"","fields":[{"autogeneratePattern":"[a-z0-9]{15}","hidden":false,"id":"text3208210256","max":15,"min":15,"name":"id","pattern":"^[a-z0-9]+$","presentable":false,"primaryKey":true,"required":true,"system":true,"type":"text"},{"name":"studentId","type":"text"},{"name":"formId","type":"text"},{"name":"data","type":"json"},{"hidden":false,"id":"autodate_f7","name":"created","onCreate":true,"onUpdate":false,"presentable":false,"system":false,"type":"autodate"},{"hidden":false,"id":"autodate_u7","name":"updated","onCreate":true,"onUpdate":true,"presentable":false,"system":false,"type":"autodate"}]}' > /dev/null 2>&1
+    -d '{"name":"form_submissions","type":"base","createRule":"","listRule":"@request.auth.id != \"\"","viewRule":"@request.auth.id != \"\"","updateRule":"@request.auth.id != \"\"","deleteRule":"@request.auth.id != \"\"","fields":[{"autogeneratePattern":"[a-z0-9]{15}","hidden":false,"id":"text3208210256","max":15,"min":15,"name":"id","pattern":"^[a-z0-9]+$","presentable":false,"primaryKey":true,"required":true,"system":true,"type":"text"},{"name":"studentId","type":"text"},{"name":"formId","type":"text"},{"name":"data","type":"json"},{"hidden":false,"id":"autodate_f7","name":"created","onCreate":true,"onUpdate":false,"presentable":false,"system":false,"type":"autodate"},{"hidden":false,"id":"autodate_u7","name":"updated","onCreate":true,"onUpdate":true,"presentable":false,"system":false,"type":"autodate"}]}' > /dev/null 2>&1
 fi
 
 echo "Fields added."

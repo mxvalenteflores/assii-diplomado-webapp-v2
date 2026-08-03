@@ -80,7 +80,7 @@ export default function StudentDetail() {
           const s = await pb.collection("students").getOne<Student>(e.studentId)
           setStudent(s)
 
-          const r = await pb.collection("submissions").getFullList<FormResponse>({
+          const r = await pb.collection("form_submissions").getFullList<FormResponse>({
             filter: `studentId="${e.studentId}"`,
             sort: "-created",
           })

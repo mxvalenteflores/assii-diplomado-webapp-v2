@@ -28,7 +28,7 @@ export default function FormResponsesPage() {
 
   const fetchResponses = async () => {
     try {
-      const records = await pb.collection("submissions").getFullList<FormResponse>({
+      const records = await pb.collection("form_submissions").getFullList<FormResponse>({
         sort: "-created",
       })
       setResponses(records)
@@ -74,7 +74,7 @@ export default function FormResponsesPage() {
             puesto: getField(response.data, "puesto"),
           })
           studentId = newStudent.id
-          await pb.collection("submissions").update(response.id, { studentId })
+          await pb.collection("form_submissions").update(response.id, { studentId })
         }
       }
 
