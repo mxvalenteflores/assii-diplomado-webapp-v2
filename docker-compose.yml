@@ -14,12 +14,6 @@ services:
       - PB_S3_SECRET_KEY=7663c7a427d4b967f360825569f9c0083daebbff27086ce49a5733faa64ccb1d
       - PB_S3_FORCE_PATH_STYLE=true
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
-      start_period: 15s
 
 volumes:
   pb_data:
