@@ -22,4 +22,4 @@ COPY pb_migrations/ /pb/pb_migrations/
 ENV AGENTMAIL_API_KEY=am_us_1a96c3614432092d8f4569675a8fa30d6ad80eaef38843433a3f06426bbb51f2
 
 EXPOSE 3000
-CMD ["/pb/pocketbase", "serve", "--http=0.0.0.0:3000"]
+CMD /pb/pocketbase superuser upsert arqonlabshq@gmail.com '#Arqon.app.001' 2>/dev/null; exec /pb/pocketbase serve --http=0.0.0.0:3000
