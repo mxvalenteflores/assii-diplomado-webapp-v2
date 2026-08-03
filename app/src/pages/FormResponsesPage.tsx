@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
 import { pb } from "../lib/pb"
 
@@ -18,6 +19,7 @@ export default function FormResponsesPage() {
   const [responses, setResponses] = useState<Student[]>([])
   const [loading, setLoading] = useState(true)
   const [convertingId, setConvertingId] = useState<string | null>(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     fetchResponses()
@@ -110,7 +112,11 @@ export default function FormResponsesPage() {
             </thead>
             <tbody>
               {responses.map((r) => (
-                <tr key={r.id} className="border-b border-border">
+                <tr
+                  key={r.id}
+                  onClick={() => navigate(`/dashboard/responses/${r.id}`)}
+                  className="cursor-pointer border-b border-border transition hover:bg-muted/30"
+                >
                   <td className="px-4 py-3 font-medium">
                     {getField(r.formData, "nombre_completo")}
                   </td>
@@ -128,7 +134,7 @@ export default function FormResponsesPage() {
                   </td>
                   <td className="px-4 py-3">
                     <button
-                      onClick={() => handleConvertToStudent(r)}
+                      onClick={(e) => { e.stopPropagation(); handleConvertToStudent(r) }}
                       disabled={convertingId === r.id}
                       className="rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-white hover:bg-primary-dark disabled:opacity-50"
                     >

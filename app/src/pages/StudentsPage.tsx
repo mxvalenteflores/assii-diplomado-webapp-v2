@@ -21,6 +21,12 @@ interface Enrollment {
   created: string
 }
 
+interface Payment {
+  id: string
+  amount: number
+  enrollmentId: string
+}
+
 const STATUS_LABELS: Record<string, string> = {
   PENDING_PAYMENT: "Pendiente de pago",
   PAYMENT_SUBMITTED: "Pago enviado",
@@ -40,7 +46,7 @@ const STATUS_COLORS: Record<string, string> = {
 }
 
 export default function StudentsPage() {
-  const [students, setStudents] = useState<(Student & { enrollmentStatus?: string; enrollmentId?: string })[]>([])
+  const [students, setStudents] = useState<(Student & { enrollmentStatus?: string; enrollmentId?: string; totalPaid: number })[]>([])
   const [loading, setLoading] = useState(true)
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [newStudent, setNewStudent] = useState({ firstName: "", lastName: "", email: "", phone: "", empresa: "", puesto: "" })
@@ -52,18 +58,28 @@ export default function StudentsPage() {
 
   const fetchStudents = async () => {
     try {
-      const [studentRes, enrollmentRes] = await Promise.all([
+      const [studentRes, enrollmentRes, paymentsRes] = await Promise.all([
         pb.collection("students").getList<Student>(1, 1000, { sort: "-created" }),
         pb.collection("enrollments").getList<Enrollment>(1, 1000, { sort: "-created" }),
+        pb.collection("payments").getList<Payment>(1, 5000),
       ])
 
       const studentList = studentRes.items
       const enrollments = enrollmentRes.items
+      const payments = paymentsRes.items
 
-      const enrollMap: Record<string, { status: string; id: string }> = {}
+      const enrollMap: Record<string, { status: string; id: string; studentId: string }> = {}
       for (const e of enrollments) {
         if (e.studentId && !enrollMap[e.studentId]) {
-          enrollMap[e.studentId] = { status: e.status, id: e.id }
+          enrollMap[e.studentId] = { status: e.status, id: e.id, studentId: e.studentId }
+        }
+      }
+
+      const paidMap: Record<string, number> = {}
+      for (const p of payments) {
+        const enr = enrollments.find((e) => e.id === p.enrollmentId)
+        if (enr?.studentId) {
+          paidMap[enr.studentId] = (paidMap[enr.studentId] || 0) + (p.amount || 0)
         }
       }
 
@@ -72,6 +88,7 @@ export default function StudentsPage() {
           ...s,
           enrollmentStatus: enrollMap[s.id]?.status,
           enrollmentId: enrollMap[s.id]?.id,
+          totalPaid: paidMap[s.id] || 0,
         }))
       )
     } catch {
@@ -134,6 +151,7 @@ export default function StudentsPage() {
                 <th className="px-4 py-3 text-left font-medium">Teléfono</th>
                 <th className="px-4 py-3 text-left font-medium">Empresa</th>
                 <th className="px-4 py-3 text-left font-medium">Estado</th>
+                <th className="px-4 py-3 text-left font-medium">Total pagado</th>
               </tr>
             </thead>
             <tbody>
@@ -161,6 +179,9 @@ export default function StudentsPage() {
                     ) : (
                       <span className="text-xs text-muted-foreground">Sin inscripción</span>
                     )}
+                  </td>
+                  <td className="px-4 py-3 text-muted-foreground">
+                    {s.totalPaid > 0 ? `$${s.totalPaid.toFixed(2)} MXN` : "—"}
                   </td>
                 </tr>
               ))}
