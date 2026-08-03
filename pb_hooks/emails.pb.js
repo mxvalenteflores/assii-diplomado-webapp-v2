@@ -116,12 +116,12 @@ onRecordAfterCreateSuccess(function(e) {
     var scheme = data.esquema_pago || ""
 
     if (email && key) {
-      var paymentInfo = getPaymentInfo(scheme)
-      var html = buildWelcomeEmail(name, paymentInfo)
-      var subject = "Bienvenida y Detalles Administrativos - Diplomado en Competencias Gerenciales SST"
-      var plainText = "Estimado/a " + name + ",\n\nLe damos la más cordial bienvenida al Diplomado en Competencias Gerenciales para la Gestión de la Seguridad y Salud en el Trabajo.\n\nSu esquema de inversión elegido es: " + paymentInfo.name + " por " + paymentInfo.amount + ".\n\nConsulte los detalles administrativos, datos bancarios y políticas en el cuerpo del correo.\n\nAtentamente,\nComité Administrativo y Académico | ASSII"
-
       try {
+        var paymentInfo = getPaymentInfo(scheme)
+        var html = buildWelcomeEmail(name, paymentInfo)
+        var subject = "Bienvenida y Detalles Administrativos - Diplomado en Competencias Gerenciales SST"
+        var plainText = "Estimado/a " + name + ",\n\nLe damos la más cordial bienvenida al Diplomado en Competencias Gerenciales para la Gestión de la Seguridad y Salud en el Trabajo.\n\nSu esquema de inversión elegido es: " + paymentInfo.name + " por " + paymentInfo.amount + ".\n\nConsulte los detalles administrativos, datos bancarios y políticas en el cuerpo del correo.\n\nAtentamente,\nComité Administrativo y Académico | ASSII"
+
         $http.send({
           url: "https://api.agentmail.to/v0/inboxes/arqonlabs%40agentmail.to/messages/send",
           method: "POST",
