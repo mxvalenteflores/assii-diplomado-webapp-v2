@@ -22,7 +22,10 @@ interface Recording {
   duration: string
 }
 
-const DIPLOMADO_ID = "YOUR_DIPLOMADO_ID"
+const getDiplomadoId = async () => {
+  const records = await pb.collection("diplomados").getFullList({ filter: "status='PUBLISHED'" })
+  return records[0]?.id || ""
+}
 
 export default function ClassesPage() {
   const navigate = useNavigate()
@@ -41,8 +44,9 @@ export default function ClassesPage() {
 
   const fetchClasses = async () => {
     try {
+      const dipId = await getDiplomadoId()
       const records = await pb.collection("classes").getFullList<Clase>({
-        filter: `diplomadoId="${DIPLOMADO_ID}"`,
+        filter: `diplomadoId="${dipId}"`,
         expand: "recordings",
         sort: "+date",
       })
@@ -58,6 +62,7 @@ export default function ClassesPage() {
   const handleSave = async () => {
     if (!title || !date) return
     try {
+      const dipId = await getDiplomadoId()
       if (editing) {
         await pb.collection("classes").update(editing.id, { title, description, date, meetingUrl })
         toast.success("Clase actualizada")
@@ -67,7 +72,7 @@ export default function ClassesPage() {
           description,
           date,
           meetingUrl,
-          diplomadoId: DIPLOMADO_ID,
+          diplomadoId: dipId,
           status: "SCHEDULED",
         })
         toast.success("Clase creada")

@@ -1,23 +1,41 @@
-const AGENTMAIL_KEY = $os.getenv("AGENTMAIL_API_KEY") || ""
-const INBOX = "arqonlabs%40agentmail.to"
+/// <reference path="./pb_data/lib.d.ts" />
+
+const agentmailKey = $os.getenv("AGENTMAIL_API_KEY") || ""
+const inbox = "arqonlabs%40agentmail.to"
 
 function sendEmail(to, subject, text) {
-  if (!AGENTMAIL_KEY) {
+  if (!agentmailKey) {
     console.log("[EMAIL MOCK]", { to, subject, text: text.slice(0, 80) })
     return
   }
   try {
     $http.send({
-      url: `https://api.agentmail.to/v0/inboxes/${INBOX}/messages/send`,
+      url: `https://api.agentmail.to/v0/inboxes/${inbox}/messages/send`,
       method: "POST",
       headers: {
-        Authorization: `Bearer ${AGENTMAIL_KEY}`,
+        Authorization: `Bearer ${agentmailKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ to, subject, text }),
     })
   } catch (e) {
     console.error("[EMAIL ERROR]", e)
+  }
+}
+
+function getStudentEmail(enrollmentId) {
+  try {
+    const enrollment = $app.findRecordById("enrollments", enrollmentId)
+    if (!enrollment) return null
+    const studentId = enrollment.get("studentId")
+    const student = $app.findRecordById("students", studentId)
+    if (!student) return null
+    return {
+      email: student.get("email"),
+      name: `${student.get("firstName")} ${student.get("lastName")}`,
+    }
+  } catch (_) {
+    return null
   }
 }
 
@@ -30,11 +48,11 @@ function notifyAdmins(subject, text) {
   } catch (_) {}
 }
 
-$app.onRecordAfterCreateRequest((e) => {
-  const col = e.collection?.name
+onRecordAfterCreateSuccess((e) => {
   const record = e.record
+  const colName = record.collection()?.name
 
-  if (col === "form_responses") {
+  if (colName === "form_responses") {
     const data = record.get("data") || {}
     const email = data.correo_electronico
     const name = data.nombre_completo
@@ -42,18 +60,18 @@ $app.onRecordAfterCreateRequest((e) => {
     if (email) {
       sendEmail(
         email,
-        "Confirmacion de inscripcion - Diplomado GSST",
-        `Hola ${name || ""},\n\nHemos recibido tu inscripcion al Diplomado en Competencias Gerenciales para la Gestion de la SST.\n\nEn breve recibiras instrucciones para completar tu proceso de inscripcion y realizar el pago correspondiente.\n\nSaludos,\nEquipo ASSII`
+        "Confirmación de inscripción — Diplomado GSST",
+        `Hola ${name || ""},\n\nHemos recibido tu inscripción al Diplomado en Competencias Gerenciales para la Gestión de la SST.\n\nEn breve recibirás instrucciones para completar tu proceso de inscripción y realizar el pago correspondiente.\n\nSaludos,\nEquipo ASSII`
       )
     }
 
     notifyAdmins(
-      "Nueva inscripcion recibida",
+      "Nueva inscripción recibida",
       `${name || "Alguien"} se ha inscrito al diplomado.`
     )
   }
 
-  if (col === "payments") {
+  if (colName === "payments") {
     const enrollmentId = record.get("enrollmentId")
     try {
       const enrollment = $app.findRecordById("enrollments", enrollmentId)
@@ -61,15 +79,12 @@ $app.onRecordAfterCreateRequest((e) => {
         enrollment.set("status", "PAYMENT_SUBMITTED")
         $app.save(enrollment)
 
-        const studentId = enrollment.get("studentId")
-        const student = $app.findRecordById("students", studentId)
+        const student = getStudentEmail(enrollmentId)
         if (student) {
-          const studentEmail = student.get("email")
-          const studentName = `${student.get("firstName")} ${student.get("lastName")}`
           sendEmail(
-            studentEmail,
+            student.email,
             "Comprobante de pago recibido",
-            `Hola ${studentName},\n\nHemos recibido tu comprobante de pago. Un administrador lo validara en breve.\n\nSaludos,\nEquipo ASSII`
+            `Hola ${student.name},\n\nHemos recibido tu comprobante de pago. Un administrador lo validará en breve.\n\nSaludos,\nEquipo ASSII`
           )
         }
       }
@@ -77,11 +92,11 @@ $app.onRecordAfterCreateRequest((e) => {
   }
 })
 
-$app.onRecordAfterUpdateRequest((e) => {
-  const col = e.collection?.name
+onRecordAfterUpdateSuccess((e) => {
   const record = e.record
+  const colName = record.collection()?.name
 
-  if (col !== "payments") return
+  if (colName !== "payments") return
 
   const status = record.get("status")
   const enrollmentId = record.get("enrollmentId")
@@ -98,24 +113,20 @@ $app.onRecordAfterUpdateRequest((e) => {
     }
     $app.save(enrollment)
 
-    const studentId = enrollment.get("studentId")
-    const student = $app.findRecordById("students", studentId)
+    const student = getStudentEmail(enrollmentId)
     if (!student) return
-
-    const studentEmail = student.get("email")
-    const studentName = `${student.get("firstName")} ${student.get("lastName")}`
 
     if (status === "VALIDATED") {
       sendEmail(
-        studentEmail,
-        "Pago validado - Acceso al diplomado confirmado",
-        `Hola ${studentName},\n\nTu pago ha sido validado. Ya tienes acceso al diplomado.\n\nRecibiras las ligas de acceso a las sesiones en tu correo.\n\nSaludos,\nEquipo ASSII`
+        student.email,
+        "Pago validado — Acceso al diplomado confirmado",
+        `Hola ${student.name},\n\nTu pago ha sido validado. Ya tienes acceso al diplomado.\n\nRecibirás las ligas de acceso a las sesiones en tu correo.\n\nSaludos,\nEquipo ASSII`
       )
     } else if (status === "REJECTED") {
       sendEmail(
-        studentEmail,
-        "Pago rechazado - Accion requerida",
-        `Hola ${studentName},\n\nTu comprobante de pago ha sido rechazado.\n\nMotivo: ${rejectionReason || "No especificado"}\n\nPor favor sube un nuevo comprobante o contacta al administrador.\n\nSaludos,\nEquipo ASSII`
+        student.email,
+        "Pago rechazado — Acción requerida",
+        `Hola ${student.name},\n\nTu comprobante de pago ha sido rechazado.\n\nMotivo: ${rejectionReason || "No especificado"}\n\nPor favor sube un nuevo comprobante o contacta al administrador.\n\nSaludos,\nEquipo ASSII`
       )
     }
   } catch (_) {}
