@@ -2,7 +2,7 @@
 migrate((app) => {
   const collection = app.findCollectionByNameOrId("pbc_631030571");
 
-  const proof = new SchemaField({
+  collection.fields.add({
     "name": "proof",
     "type": "file",
     "system": false,
@@ -23,15 +23,13 @@ migrate((app) => {
     }
   });
 
-  collection.fields.add(proof);
-
   return app.save(collection);
 }, (app) => {
   const collection = app.findCollectionByNameOrId("pbc_631030571");
 
-  const proof = collection.fields.find((f) => f.name === "proof");
-  if (proof) {
-    collection.fields.remove(proof);
+  const idx = collection.fields.findIndex((f) => f.name === "proof");
+  if (idx >= 0) {
+    collection.fields.removeAt(idx);
   }
 
   return app.save(collection);
