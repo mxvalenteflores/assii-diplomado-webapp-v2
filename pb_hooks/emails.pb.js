@@ -2,13 +2,12 @@
 
 console.log("[HOOKS] Loading email hooks...")
 
-var agentmailKey = $os.getenv("AGENTMAIL_API_KEY") || ""
-var inbox = "arqonlabs%40agentmail.to"
-console.log("[HOOKS] AgentMail key:", agentmailKey ? "SET" : "NOT SET")
-
 onRecordAfterCreateSuccess(function(e) {
   var record = e.record
   var colName = record.collection() ? record.collection().name : ""
+
+  // Goja doesn't support outer scope closure variables — call $os.getenv inside callbacks
+  var key = $os.getenv("AGENTMAIL_API_KEY") || ""
 
   if (colName === "students") {
     var formData = record.get("formData")
@@ -21,7 +20,7 @@ onRecordAfterCreateSuccess(function(e) {
     var email = data.correo_electronico
     var name = data.nombre_completo || ""
 
-    if (email && agentmailKey) {
+    if (email && key) {
       var escapedName = name.replace(/</g, "&lt;") || "Futuro diplomante"
 
       var html = "<!DOCTYPE html><html lang=\"es\"><head><meta charset=\"UTF-8\"></head>" +
@@ -50,10 +49,10 @@ onRecordAfterCreateSuccess(function(e) {
 
       try {
         $http.send({
-          url: "https://api.agentmail.to/v0/inboxes/" + inbox + "/messages/send",
+          url: "https://api.agentmail.to/v0/inboxes/arqonlabs%40agentmail.to/messages/send",
           method: "POST",
           headers: {
-            Authorization: "Bearer " + agentmailKey,
+            Authorization: "Bearer " + key,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ to: email, subject: "Hemos recibido tu formulario \u2014 Diplomado GSST", text: plainText, html: html }),
@@ -69,9 +68,9 @@ onRecordAfterCreateSuccess(function(e) {
         for (var ai = 0; ai < admins.length; ai++) {
           try {
             $http.send({
-              url: "https://api.agentmail.to/v0/inboxes/" + inbox + "/messages/send",
+              url: "https://api.agentmail.to/v0/inboxes/arqonlabs%40agentmail.to/messages/send",
               method: "POST",
-              headers: { Authorization: "Bearer " + agentmailKey, "Content-Type": "application/json" },
+              headers: { Authorization: "Bearer " + key, "Content-Type": "application/json" },
               body: JSON.stringify({ to: admins[ai].get("email"), subject: "Nueva inscripci\u00f3n", text: (name || "Alguien") + " se ha inscrito al diplomado." }),
             })
           } catch (_) {}
@@ -87,23 +86,24 @@ onRecordAfterCreateSuccess(function(e) {
       if (enrollment) {
         enrollment.set("status", "PAYMENT_SUBMITTED")
         $app.save(enrollment)
-        
-        var student = null
+
+        var studentEmail = null
+        var studentName = ""
         try {
           var sid = enrollment.get("studentId")
-          var s = $app.findRecordById("students", sid) 
-          if (s) student = { email: s.get("email"), name: s.get("firstName") + " " + s.get("lastName") }
+          var s = $app.findRecordById("students", sid)
+          if (s) { studentEmail = s.get("email"); studentName = s.get("firstName") + " " + s.get("lastName") }
         } catch (_) {}
 
-        if (student && student.email && agentmailKey) {
+        if (studentEmail && key) {
           try {
             $http.send({
-              url: "https://api.agentmail.to/v0/inboxes/" + inbox + "/messages/send",
+              url: "https://api.agentmail.to/v0/inboxes/arqonlabs%40agentmail.to/messages/send",
               method: "POST",
-              headers: { Authorization: "Bearer " + agentmailKey, "Content-Type": "application/json" },
-              body: JSON.stringify({ to: student.email, subject: "Comprobante de pago recibido", text: "Hola " + student.name + ",\n\nHemos recibido tu comprobante de pago. Un administrador lo validar\u00e1 en breve.\n\nSaludos,\nEquipo ASSII" }),
+              headers: { Authorization: "Bearer " + key, "Content-Type": "application/json" },
+              body: JSON.stringify({ to: studentEmail, subject: "Comprobante de pago recibido", text: "Hola " + studentName + ",\n\nHemos recibido tu comprobante de pago. Un administrador lo validar\u00e1 en breve.\n\nSaludos,\nEquipo ASSII" }),
             })
-            console.log("[EMAIL SENT] payment receipt to", student.email)
+            console.log("[EMAIL SENT] payment receipt to", studentEmail)
           } catch (_) {}
         }
       }
@@ -117,6 +117,7 @@ onRecordAfterUpdateSuccess(function(e) {
 
   if (colName !== "payments") return
 
+  var key = $os.getenv("AGENTMAIL_API_KEY") || ""
   var status = record.get("status")
   var enrollmentId = record.get("enrollmentId")
   var rejectionReason = record.get("rejectionReason")
@@ -132,33 +133,34 @@ onRecordAfterUpdateSuccess(function(e) {
     }
     $app.save(enrollment)
 
-    var student = null
+    var studentEmailUpd = null
+    var studentNameUpd = ""
     try {
       var sid2 = enrollment.get("studentId")
       var s2 = $app.findRecordById("students", sid2)
-      if (s2) student = { email: s2.get("email"), name: s2.get("firstName") + " " + s2.get("lastName") }
+      if (s2) { studentEmailUpd = s2.get("email"); studentNameUpd = s2.get("firstName") + " " + s2.get("lastName") }
     } catch (_) {}
 
-    if (student && student.email && agentmailKey) {
+    if (studentEmailUpd && key) {
       if (status === "VALIDATED") {
         try {
           $http.send({
-            url: "https://api.agentmail.to/v0/inboxes/" + inbox + "/messages/send",
+            url: "https://api.agentmail.to/v0/inboxes/arqonlabs%40agentmail.to/messages/send",
             method: "POST",
-            headers: { Authorization: "Bearer " + agentmailKey, "Content-Type": "application/json" },
-            body: JSON.stringify({ to: student.email, subject: "Pago validado \u2014 Acceso al diplomado confirmado", text: "Hola " + student.name + ",\n\nTu pago ha sido validado. Ya tienes acceso al diplomado.\n\nRecibir\u00e1s las ligas de acceso a las sesiones en tu correo.\n\nSaludos,\nEquipo ASSII" }),
+            headers: { Authorization: "Bearer " + key, "Content-Type": "application/json" },
+            body: JSON.stringify({ to: studentEmailUpd, subject: "Pago validado \u2014 Acceso al diplomado confirmado", text: "Hola " + studentNameUpd + ",\n\nTu pago ha sido validado. Ya tienes acceso al diplomado.\n\nRecibir\u00e1s las ligas de acceso a las sesiones en tu correo.\n\nSaludos,\nEquipo ASSII" }),
           })
-          console.log("[EMAIL SENT] validation to", student.email)
+          console.log("[EMAIL SENT] validation to", studentEmailUpd)
         } catch (_) {}
       } else if (status === "REJECTED") {
         try {
           $http.send({
-            url: "https://api.agentmail.to/v0/inboxes/" + inbox + "/messages/send",
+            url: "https://api.agentmail.to/v0/inboxes/arqonlabs%40agentmail.to/messages/send",
             method: "POST",
-            headers: { Authorization: "Bearer " + agentmailKey, "Content-Type": "application/json" },
-            body: JSON.stringify({ to: student.email, subject: "Pago rechazado \u2014 Acci\u00f3n requerida", text: "Hola " + student.name + ",\n\nTu comprobante de pago ha sido rechazado.\n\nMotivo: " + (rejectionReason || "No especificado") + "\n\nPor favor sube un nuevo comprobante o contacta al administrador.\n\nSaludos,\nEquipo ASSII" }),
+            headers: { Authorization: "Bearer " + key, "Content-Type": "application/json" },
+            body: JSON.stringify({ to: studentEmailUpd, subject: "Pago rechazado \u2014 Acci\u00f3n requerida", text: "Hola " + studentNameUpd + ",\n\nTu comprobante de pago ha sido rechazado.\n\nMotivo: " + (rejectionReason || "No especificado") + "\n\nPor favor sube un nuevo comprobante o contacta al administrador.\n\nSaludos,\nEquipo ASSII" }),
           })
-          console.log("[EMAIL SENT] rejection to", student.email)
+          console.log("[EMAIL SENT] rejection to", studentEmailUpd)
         } catch (_) {}
       }
     }
