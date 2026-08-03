@@ -95,6 +95,7 @@ migrate((app) => {
         "required": false,
         "system": false,
         "type": "text"
+      },
       {
         "autogeneratePattern": "",
         "hidden": false,
