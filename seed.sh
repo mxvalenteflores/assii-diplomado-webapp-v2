@@ -29,12 +29,12 @@ fi
 
 AUTH="Authorization: Bearer $TOKEN"
 
-# --- 2. Create registrations collection if not exists ---
-REG_EXISTS=$(curl -s "$PB/api/collections" -H "$AUTH" | python3 -c "import sys,json; items=[c for c in json.load(sys.stdin).get('items',[]) if c['name']=='registrations']; print('yes' if items else '')" 2>/dev/null)
+# --- 2. Create signups collection if not exists ---
+REG_EXISTS=$(curl -s "$PB/api/collections" -H "$AUTH" | python3 -c "import sys,json; items=[c for c in json.load(sys.stdin).get('items',[]) if c['name']=='signups']; print('yes' if items else '')" 2>/dev/null)
 if [ -z "$REG_EXISTS" ]; then
-  echo "Creating registrations collection..."
+  echo "Creating signups collection..."
   curl -s -X POST "$PB/api/collections" -H "$AUTH" -H "Content-Type: application/json" \
-    -d '{"name":"registrations","type":"base","createRule":"","listRule":"@request.auth.id != \"\"","viewRule":"@request.auth.id != \"\"","updateRule":"@request.auth.id != \"\"","deleteRule":"@request.auth.id != \"\"","fields":[{"autogeneratePattern":"[a-z0-9]{15}","hidden":false,"id":"text_reg_id","max":15,"min":15,"name":"id","pattern":"^[a-z0-9]+$","presentable":false,"primaryKey":true,"required":true,"system":true,"type":"text"},{"name":"studentId","type":"text"},{"name":"formId","type":"text"},{"name":"data","type":"text"}]}' > /dev/null 2>&1
+    -d '{"name":"signups","type":"base","createRule":"","listRule":"@request.auth.id != \"\"","viewRule":"@request.auth.id != \"\"","updateRule":"@request.auth.id != \"\"","deleteRule":"@request.auth.id != \"\"","fields":[{"autogeneratePattern":"[a-z0-9]{15}","hidden":false,"id":"text_reg_id","max":15,"min":15,"name":"id","pattern":"^[a-z0-9]+$","presentable":false,"primaryKey":true,"required":true,"system":true,"type":"text"},{"name":"studentId","type":"text"},{"name":"formId","type":"text"},{"name":"data","type":"text"}]}' > /dev/null 2>&1
   echo "Registrations collection created."
 else
   echo "Registrations collection already exists."

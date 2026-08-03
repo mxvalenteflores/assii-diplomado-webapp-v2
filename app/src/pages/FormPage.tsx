@@ -83,7 +83,7 @@ export default function FormPage() {
         studentId = newStudent.id
       }
 
-      await pb.collection("registrations").create({
+      await pb.collection("signups").create({
         formId: form.id,
         studentId,
         data: JSON.stringify(values),
