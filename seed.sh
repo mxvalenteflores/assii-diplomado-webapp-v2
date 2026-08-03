@@ -107,7 +107,7 @@ curl -s -X PATCH "$PB/api/collections/pbc_392670462" -H "$AUTH" -H "Content-Type
   ]}' > /dev/null 2>&1
 
 # submissions (replaces broken form_responses)
-# Delete old broken form_responses if it exists (replaced by form_submissions)
+# Delete old broken form_responses if it exists (replaced by registrations)
 OLD_FR_ID=$(curl -s "$PB/api/collections" -H "$AUTH" | python3 -c "import sys,json; items=[c for c in json.load(sys.stdin).get('items',[]) if c['name']=='form_responses']; print(items[0]['id'] if items else '')" 2>/dev/null)
 if [ -n "$OLD_FR_ID" ]; then
   curl -s -X DELETE "$PB/api/collections/$OLD_FR_ID" -H "$AUTH" > /dev/null 2>&1
