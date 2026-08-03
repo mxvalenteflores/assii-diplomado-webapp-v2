@@ -21,7 +21,7 @@ migrate((app) => {
       {
         "autogeneratePattern": "",
         "hidden": false,
-        "id": "text_ib_sid",
+        "id": "text_ibx_sid",
         "max": 0,
         "min": 0,
         "name": "studentId",
@@ -35,7 +35,7 @@ migrate((app) => {
       {
         "autogeneratePattern": "",
         "hidden": false,
-        "id": "text_ib_fid",
+        "id": "text_ibx_fid",
         "max": 0,
         "min": 0,
         "name": "formId",
@@ -49,7 +49,7 @@ migrate((app) => {
       {
         "autogeneratePattern": "",
         "hidden": false,
-        "id": "text_ib_data",
+        "id": "text_ibx_data",
         "max": 0,
         "min": 0,
         "name": "data",
@@ -61,7 +61,7 @@ migrate((app) => {
         "type": "text"
       }
     ],
-    "id": "pbc_77766655544",
+    "id": "pbc_55544433322",
     "indexes": [],
     "listRule": "@request.auth.id != \"\"",
     "name": "inbox",
@@ -73,6 +73,6 @@ migrate((app) => {
 
   return app.save(collection);
 }, (app) => {
-  const collection = app.findCollectionByNameOrId("pbc_77766655544");
+  const collection = app.findCollectionByNameOrId("pbc_55544433322");
   return app.delete(collection);
 })
