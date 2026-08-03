@@ -141,7 +141,9 @@ onRecordAfterCreateSuccess((e) => {
         "Nueva inscripción recibida",
         `${name || "Alguien"} se ha inscrito al diplomado.`
       )
-    } catch (_) {}
+    } catch (e) {
+      console.error("[STUDENT EMAIL ERROR]", String(e))
+    }
   }
 
   if (colName === "payments") {
