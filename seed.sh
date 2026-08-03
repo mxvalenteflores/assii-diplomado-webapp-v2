@@ -29,7 +29,46 @@ fi
 
 AUTH="Authorization: Bearer $TOKEN"
 
-# --- 2. Create admin user ---
+# --- 2. Ensure autodate fields exist on all collections ---
+echo "Checking autodate fields..."
+python3 -c "
+import urllib.request, json
+
+PB = '$PB'
+headers = {'Authorization': 'Bearer $TOKEN', 'Content-Type': 'application/json'}
+coll_ids = ['pbc_3827815851','pbc_2862470677','pbc_913941788','pbc_1009377862','pbc_631030571','pbc_2478702895','pbc_392670462','pbc_1739871503']
+
+for cid in coll_ids:
+    req = urllib.request.Request(f'{PB}/api/collections/{cid}', headers=headers)
+    resp = urllib.request.urlopen(req)
+    data = json.loads(resp.read())
+    fields = data.get('fields', [])
+    
+    has_created = any(f.get('name') == 'created' for f in fields)
+    if has_created:
+        continue
+    
+    print(f'  Adding autodate to {cid}')
+    fields.append({
+        'hidden': False, 'id': 'autodate_cre', 'name': 'created',
+        'onCreate': True, 'onUpdate': False, 'presentable': False,
+        'system': False, 'type': 'autodate'
+    })
+    fields.append({
+        'hidden': False, 'id': 'autodate_upd', 'name': 'updated',
+        'onCreate': True, 'onUpdate': True, 'presentable': False,
+        'system': False, 'type': 'autodate'
+    })
+    
+    body = json.dumps({'fields': fields}).encode()
+    req = urllib.request.Request(f'{PB}/api/collections/{cid}', data=body, headers=headers, method='PATCH')
+    urllib.request.urlopen(req)
+
+print('Autodate check complete.')
+" 2>&1 || echo "Autodate update attempted."
+echo "Autodate check complete."
+
+# --- 3. Create admin user ---
 echo "Creating admin user..."
 EXISTING=$(curl -s "$PB/api/collections/admins/records?filter=email='$ADMIN_EMAIL'" -H "$AUTH" | python3 -c "import sys,json; print(len(json.load(sys.stdin).get('items',[])))" 2>/dev/null)
 if [ "$EXISTING" = "0" ]; then
