@@ -25,11 +25,10 @@ export default function FormResponsesPage() {
 
   const fetchResponses = async () => {
     try {
-      const records = await pb.collection("students").getFullList<Student>({
+      const all = await pb.collection("students").getFullList<Student>({
         sort: "-created",
-        filter: "formData != null",
       })
-      setResponses(records)
+      setResponses(all.filter((s) => s.formData && s.formData !== ""))
     } catch (e) {
       console.error("Fetch error:", e)
       toast.error("Error al cargar respuestas")
