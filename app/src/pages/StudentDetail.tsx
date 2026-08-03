@@ -195,10 +195,7 @@ export default function StudentDetail() {
 
   const getProofUrl = (payment: Payment) => {
     if (!payment.proofUrl) return null
-    const base = import.meta.env.DEV
-      ? "http://localhost:8090"
-      : "https://portal.diplomadosassii.site"
-    return `${base}/api/files/payments/${payment.id}/${payment.proofUrl}`
+    return pb.files.getUrl(payment, payment.proofUrl)
   }
 
   if (loading) return <div className="p-8 text-center text-muted-foreground">Cargando...</div>

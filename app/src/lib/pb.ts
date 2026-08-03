@@ -1,8 +1,6 @@
-import PocketBase from 'pocketbase'
+import PocketBase from "pocketbase"
 
-const PB_URL = import.meta.env.DEV
-  ? 'http://localhost:8090'
-  : 'https://portal.diplomadosassii.site'
+const PB_URL = import.meta.env.DEV ? "http://localhost:8090" : "/"
 
 export const pb = new PocketBase(PB_URL)
 

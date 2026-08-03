@@ -2,7 +2,7 @@ services:
   pocketbase:
     build: .
     ports:
-      - "8090:8090"
+      - "3000:3000"
     volumes:
       - ./pb_data:/pb/pb_data
     environment:
