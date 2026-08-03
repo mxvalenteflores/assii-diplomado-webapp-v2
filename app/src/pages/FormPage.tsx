@@ -64,13 +64,13 @@ export default function FormPage() {
     const phone = values.telefono_celular || ""
 
     try {
-      const existingStudents = await pb.collection("students").getFullList({
+      const existingStudents = await pb.collection("students").getList(1, 1000, {
         filter: `email="${email}"`,
       })
 
       let studentId: string
-      if (existingStudents.length > 0) {
-        studentId = existingStudents[0].id
+      if (existingStudents.items.length > 0) {
+        studentId = existingStudents.items[0].id
         await pb.collection("students").update(studentId, {
           formData: JSON.stringify(values),
         })

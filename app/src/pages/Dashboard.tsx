@@ -42,20 +42,20 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchEnrollments = async () => {
       try {
-        const records = await pb.collection("enrollments").getFullList<Enrollment>({
+        const records = await pb.collection("enrollments").getList<Enrollment>(1, 1000, {
           sort: "-created",
         })
 
-        const studentIds = [...new Set(records.map((e) => e.studentId).filter(Boolean))]
+        const studentIds = [...new Set(records.items.map((e) => e.studentId).filter(Boolean))]
         let studentsMap: Record<string, Student> = {}
         if (studentIds.length > 0) {
-          const students = await pb.collection("students").getFullList<Student>({
+          const students = await pb.collection("students").getList<Student>(1, 1000, {
             filter: studentIds.map((id) => `id="${id}"`).join("||"),
           })
-          studentsMap = Object.fromEntries(students.map((s) => [s.id, s]))
+          studentsMap = Object.fromEntries(students.items.map((s) => [s.id, s]))
         }
 
-        setEnrollments(records.map((e) => ({ ...e, _student: studentsMap[e.studentId] })))
+        setEnrollments(records.items.map((e) => ({ ...e, _student: studentsMap[e.studentId] })))
       } catch {
         pb.authStore.clear()
         navigate("/login")

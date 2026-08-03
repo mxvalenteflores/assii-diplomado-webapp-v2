@@ -20,8 +20,8 @@ interface Recording {
 }
 
 const getDiplomadoId = async () => {
-  const records = await pb.collection("diplomados").getFullList()
-  return records[0]?.id || ""
+  const records = await pb.collection("diplomados").getList(1, 1000, {})
+  return records.items[0]?.id || ""
 }
 
 export default function ClassesPage() {
@@ -42,18 +42,20 @@ export default function ClassesPage() {
   const fetchClasses = async () => {
     try {
       const dipId = await getDiplomadoId()
-      const records = await pb.collection("classes").getFullList<Clase>({
+      const result = await pb.collection("classes").getList<Clase>(1, 1000, {
         filter: `diplomadoId="${dipId}"`,
         sort: "+date",
       })
+      const records = result.items
       setClasses(records)
 
       const classIds = records.map((c) => c.id)
       if (classIds.length > 0) {
-        const recs = await pb.collection("recordings").getFullList<Recording>({
+        const recsResult = await pb.collection("recordings").getList<Recording>(1, 1000, {
           filter: classIds.map((id) => `classId="${id}"`).join("||"),
           sort: "+created",
         })
+        const recs = recsResult.items
         const map: Record<string, Recording[]> = {}
         for (const r of recs) {
           if (!map[r.classId]) map[r.classId] = []
@@ -62,7 +64,6 @@ export default function ClassesPage() {
         setRecordingsByClass(map)
       }
     } catch {
-      toast.error("Error al cargar clases")
     } finally {
       setLoading(false)
     }

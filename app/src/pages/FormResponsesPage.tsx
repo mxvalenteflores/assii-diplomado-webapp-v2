@@ -25,13 +25,11 @@ export default function FormResponsesPage() {
 
   const fetchResponses = async () => {
     try {
-      const all = await pb.collection("students").getFullList<Student>({
+      const result = await pb.collection("students").getList<Student>(1, 1000, {
         sort: "-created",
       })
-      setResponses(all.filter((s) => s.formData && s.formData !== ""))
-    } catch (e) {
-      console.error("Fetch error:", e)
-      toast.error("Error al cargar respuestas")
+      setResponses(result.items.filter((s) => s.formData && s.formData !== ""))
+    } catch {
     } finally {
       setLoading(false)
     }
@@ -54,14 +52,14 @@ export default function FormResponsesPage() {
   const handleConvertToStudent = async (student: Student) => {
     setConvertingId(student.id)
     try {
-      const diplomados = await pb.collection("diplomados").getFullList()
-      const diplomadoId = diplomados[0]?.id || ""
+      const diplomados = await pb.collection("diplomados").getList(1, 1000, {})
+      const diplomadoId = diplomados.items[0]?.id || ""
 
-      const existing = await pb.collection("enrollments").getFullList({
+      const existing = await pb.collection("enrollments").getList(1, 1000, {
         filter: `studentId="${student.id}"`,
       })
 
-      if (existing.length > 0) {
+      if (existing.items.length > 0) {
         toast.info("Este estudiante ya tiene una inscripción")
         setConvertingId(null)
         return

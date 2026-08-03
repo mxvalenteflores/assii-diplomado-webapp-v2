@@ -84,16 +84,16 @@ export default function StudentDetail() {
           // Parse form data from the student record itself
           const formResponses: FormResponse[] = []
           if (s.formData) {
-            const allForms = await pb.collection("forms").getFullList<{ id: string; title: string; fields: Array<{ name: string; label: string }> }>()
+            const allForms = await pb.collection("forms").getList<{ id: string; title: string; fields: Array<{ name: string; label: string }> }>(1, 1000, {})
             const configs: Record<string, { title: string; fields: Array<{ name: string; label: string }> }> = {}
-            for (const f of allForms) {
+            for (const f of allForms.items) {
               configs[f.id] = { title: f.title, fields: f.fields }
             }
             setFormConfigs(configs)
 
             formResponses.push({
               id: s.id,
-              formId: allForms[0]?.id || "",
+              formId: allForms.items[0]?.id || "",
               data: s.formData,
               created: s.created,
             })
@@ -101,11 +101,11 @@ export default function StudentDetail() {
           setResponses(formResponses)
         }
 
-        const p = await pb.collection("payments").getFullList<Payment>({
+        const p = await pb.collection("payments").getList<Payment>(1, 1000, {
           filter: `enrollmentId="${enrollmentId}"`,
           sort: "-created",
         })
-        setPayments(p)
+        setPayments(p.items)
       } catch {
         navigate("/dashboard")
       } finally {
@@ -126,11 +126,11 @@ export default function StudentDetail() {
       await pb.collection("payments").create(formData)
       toast.success("Comprobante subido")
 
-      const p = await pb.collection("payments").getFullList<Payment>({
+      const p = await pb.collection("payments").getList<Payment>(1, 1000, {
         filter: `enrollmentId="${enrollmentId}"`,
         sort: "-created",
       })
-      setPayments(p)
+      setPayments(p.items)
       setShowPaymentModal(false)
       setPaymentAmount("")
       setPaymentFile(null)
@@ -143,11 +143,11 @@ export default function StudentDetail() {
     try {
       await pb.collection("payments").update(id, { status: "VALIDATED" })
       toast.success("Pago validado")
-      const p = await pb.collection("payments").getFullList<Payment>({
+      const p = await pb.collection("payments").getList<Payment>(1, 1000, {
         filter: `enrollmentId="${enrollmentId}"`,
         sort: "-created",
       })
-      setPayments(p)
+      setPayments(p.items)
     } catch {
       toast.error("Error al validar pago")
     }
@@ -162,11 +162,11 @@ export default function StudentDetail() {
         rejectionReason: reason,
       })
       toast.success("Pago rechazado")
-      const p = await pb.collection("payments").getFullList<Payment>({
+      const p = await pb.collection("payments").getList<Payment>(1, 1000, {
         filter: `enrollmentId="${enrollmentId}"`,
         sort: "-created",
       })
-      setPayments(p)
+      setPayments(p.items)
     } catch {
       toast.error("Error al rechazar pago")
     }
@@ -179,11 +179,11 @@ export default function StudentDetail() {
       toast.success("Monto actualizado")
       setEditingPaymentId(null)
       setEditingAmount("")
-      const p = await pb.collection("payments").getFullList<Payment>({
+      const p = await pb.collection("payments").getList<Payment>(1, 1000, {
         filter: `enrollmentId="${enrollmentId}"`,
         sort: "-created",
       })
-      setPayments(p)
+      setPayments(p.items)
     } catch {
       toast.error("Error al actualizar monto")
     }
@@ -194,11 +194,11 @@ export default function StudentDetail() {
     try {
       await pb.collection("payments").delete(id)
       toast.success("Pago eliminado")
-      const p = await pb.collection("payments").getFullList<Payment>({
+      const p = await pb.collection("payments").getList<Payment>(1, 1000, {
         filter: `enrollmentId="${enrollmentId}"`,
         sort: "-created",
       })
-      setPayments(p)
+      setPayments(p.items)
     } catch {
       toast.error("Error al eliminar pago")
     }

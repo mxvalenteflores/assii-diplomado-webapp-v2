@@ -52,10 +52,13 @@ export default function StudentsPage() {
 
   const fetchStudents = async () => {
     try {
-      const [studentList, enrollments] = await Promise.all([
-        pb.collection("students").getFullList<Student>({ sort: "-created" }),
-        pb.collection("enrollments").getFullList<Enrollment>({ sort: "-created" }),
+      const [studentRes, enrollmentRes] = await Promise.all([
+        pb.collection("students").getList<Student>(1, 1000, { sort: "-created" }),
+        pb.collection("enrollments").getList<Enrollment>(1, 1000, { sort: "-created" }),
       ])
+
+      const studentList = studentRes.items
+      const enrollments = enrollmentRes.items
 
       const enrollMap: Record<string, { status: string; id: string }> = {}
       for (const e of enrollments) {
@@ -72,7 +75,6 @@ export default function StudentsPage() {
         }))
       )
     } catch {
-      toast.error("Error al cargar estudiantes")
     } finally {
       setLoading(false)
     }
@@ -83,8 +85,8 @@ export default function StudentsPage() {
     try {
       const student = await pb.collection("students").create(newStudent)
 
-      const diplomados = await pb.collection("diplomados").getFullList()
-      const diplomadoId = diplomados[0]?.id || ""
+      const diplomados = await pb.collection("diplomados").getList(1, 1000, {})
+      const diplomadoId = diplomados.items[0]?.id || ""
 
       await pb.collection("enrollments").create({
         studentId: student.id,
