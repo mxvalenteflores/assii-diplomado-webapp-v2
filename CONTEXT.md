@@ -6,6 +6,9 @@
 > status: vivo
 
 ## Ultimos cambios
+- 2026-08-03 06:00 — R2 file storage configurado en PocketBase (Settings > Files). Litestream integrado en Dockerfile (backups cada 15min a R2, retention 30d).
+- 2026-08-03 06:00 — Campo `proof` (file) agregado a coleccion payments via PocketBase Admin API. Frontend actualizado (proofUrl -> proof).
+- 2026-08-03 05:58 — Toggle de visibilidad de contraseña en login agregado.
 - 2026-08-03 02:40 — Deploy exitoso en Coolify. Seed production completo: admin, diplomado, form 15 campos, 7 modulos.
 - 2026-08-03 02:24 — Schema + seed local. pb_migrations commit.
 - 2026-08-03 02:11 — Scaffolding Vite+React+Tailwind+Router, Dockerfile, hooks AgentMail.
@@ -26,7 +29,5 @@
 5. Formulario publico: https://portal.diplomadosassii.site/forms/competencias-gerenciales-sst
 
 ## Pendientes
-- Configurar R2 como file storage en PocketBase (Settings > Files)
-- Configurar Litestream para backups de SQLite
 - Dashboard de estudiantes (futuro)
-- Agregar campo file a payments (cambiar proofUrl de text a file)
+- Crear nuevo diplomado/forms (proximo ciclo)
