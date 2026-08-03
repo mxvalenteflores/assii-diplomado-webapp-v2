@@ -1,7 +1,10 @@
 /// <reference path="./pb_data/lib.d.ts" />
 
+console.log("[HOOKS] Loading email hooks...")
+
 const agentmailKey = $os.getenv("AGENTMAIL_API_KEY") || ""
 const inbox = "arqonlabs%40agentmail.to"
+console.log("[HOOKS] AgentMail key:", agentmailKey ? "SET" : "NOT SET")
 
 function sendEmail(to, subject, text, html) {
   if (!agentmailKey) {
