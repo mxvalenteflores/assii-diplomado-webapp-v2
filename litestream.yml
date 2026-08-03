@@ -9,6 +9,6 @@ dbs:
         access-key-id: 7460268d0899d188e34f63e6f6261cd1
         secret-access-key: 7663c7a427d4b967f360825569f9c0083daebbff27086ce49a5733faa64ccb1d
         force-path-style: true
-        sync-interval: 15m
+        sync-interval: 5m
         retention: 720h
-        snapshot-interval: 24h
+        snapshot-interval: 4h
