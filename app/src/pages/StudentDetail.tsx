@@ -11,6 +11,7 @@ interface Student {
   phone: string
   empresa: string
   puesto: string
+  formData?: string
   created: string
 }
 
@@ -80,23 +81,24 @@ export default function StudentDetail() {
           const s = await pb.collection("students").getOne<Student>(e.studentId)
           setStudent(s)
 
-          const r = await pb.collection("inbox").getFullList<FormResponse>({
-            filter: `studentId="${e.studentId}"`,
-            sort: "-created",
-          })
-          setResponses(r)
-
-          const formIds = [...new Set(r.map((resp) => resp.formId).filter(Boolean))]
-          if (formIds.length > 0) {
-            const forms = await pb.collection("forms").getFullList<{ id: string; title: string; fields: Array<{ name: string; label: string }> }>({
-              filter: formIds.map((id) => `id="${id}"`).join("||"),
-            })
+          // Parse form data from the student record itself
+          const formResponses: FormResponse[] = []
+          if (s.formData) {
+            const allForms = await pb.collection("forms").getFullList<{ id: string; title: string; fields: Array<{ name: string; label: string }> }>()
             const configs: Record<string, { title: string; fields: Array<{ name: string; label: string }> }> = {}
-            for (const f of forms) {
+            for (const f of allForms) {
               configs[f.id] = { title: f.title, fields: f.fields }
             }
             setFormConfigs(configs)
+
+            formResponses.push({
+              id: s.id,
+              formId: allForms[0]?.id || "",
+              data: s.formData,
+              created: s.created,
+            })
           }
+          setResponses(formResponses)
         }
 
         const p = await pb.collection("payments").getFullList<Payment>({

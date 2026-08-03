@@ -52,23 +52,27 @@ onRecordAfterCreateSuccess((e) => {
   const record = e.record
   const colName = record.collection()?.name
 
-  if (colName === "inbox") {
-    const data = record.get("data") || {}
-    const email = data.correo_electronico
-    const name = data.nombre_completo
+  if (colName === "students") {
+    const formData = record.get("formData")
+    if (!formData) return
+    try {
+      const data = JSON.parse(formData)
+      const email = data.correo_electronico
+      const name = data.nombre_completo
 
-    if (email) {
-      sendEmail(
-        email,
-        "Confirmación de inscripción — Diplomado GSST",
-        `Hola ${name || ""},\n\nHemos recibido tu inscripción al Diplomado en Competencias Gerenciales para la Gestión de la SST.\n\nEn breve recibirás instrucciones para completar tu proceso de inscripción y realizar el pago correspondiente.\n\nSaludos,\nEquipo ASSII`
+      if (email) {
+        sendEmail(
+          email,
+          "Confirmación de inscripción — Diplomado GSST",
+          `Hola ${name || ""},\n\nHemos recibido tu inscripción al Diplomado en Competencias Gerenciales para la Gestión de la SST.\n\nEn breve recibirás instrucciones para completar tu proceso de inscripción y realizar el pago correspondiente.\n\nSaludos,\nEquipo ASSII`
+        )
+      }
+
+      notifyAdmins(
+        "Nueva inscripción recibida",
+        `${name || "Alguien"} se ha inscrito al diplomado.`
       )
-    }
-
-    notifyAdmins(
-      "Nueva inscripción recibida",
-      `${name || "Alguien"} se ha inscrito al diplomado.`
-    )
+    } catch (_) {}
   }
 
   if (colName === "payments") {

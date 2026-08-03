@@ -95,6 +95,18 @@ migrate((app) => {
         "required": false,
         "system": false,
         "type": "text"
+      {
+        "autogeneratePattern": "",
+        "hidden": false,
+        "id": "text_fd",
+        "max": 0,
+        "min": 0,
+        "name": "formData",
+        "pattern": "",
+        "presentable": false,
+        "required": false,
+        "system": false,
+        "type": "text"
       }
     ],
     "id": "pbc_3827815851",

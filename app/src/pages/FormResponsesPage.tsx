@@ -2,23 +2,20 @@ import { useEffect, useState } from "react"
 import { toast } from "sonner"
 import { pb } from "../lib/pb"
 
-interface FormResponse {
-  id: string
-  studentId: string
-  formId: string
-  data: string | Record<string, unknown>
-  created: string
-}
-
 interface Student {
   id: string
   email: string
   firstName: string
   lastName: string
+  phone: string
+  empresa: string
+  puesto: string
+  formData: string
+  created: string
 }
 
 export default function FormResponsesPage() {
-  const [responses, setResponses] = useState<FormResponse[]>([])
+  const [responses, setResponses] = useState<Student[]>([])
   const [loading, setLoading] = useState(true)
   const [convertingId, setConvertingId] = useState<string | null>(null)
 
@@ -28,76 +25,60 @@ export default function FormResponsesPage() {
 
   const fetchResponses = async () => {
     try {
-      const records = await pb.collection("inbox").getFullList<FormResponse>({
+      const records = await pb.collection("students").getFullList<Student>({
         sort: "-created",
+        filter: "formData != ''",
       })
       setResponses(records)
     } catch (e) {
-      console.error("Form responses fetch error:", e)
+      console.error("Fetch error:", e)
       toast.error("Error al cargar respuestas")
     } finally {
       setLoading(false)
     }
   }
 
-  const getField = (rawData: string | Record<string, unknown>, key: string): string => {
-    const data = typeof rawData === "string" ? JSON.parse(rawData) : rawData
-    const val = data[key]
-    if (typeof val === "string") return val
-    if (Array.isArray(val)) return val.join(", ")
-    if (val !== undefined && val !== null) return String(val)
-    return "—"
+  const getField = (rawData: string | undefined, key: string): string => {
+    if (!rawData) return "—"
+    try {
+      const data = JSON.parse(rawData)
+      const val = data[key]
+      if (typeof val === "string") return val
+      if (Array.isArray(val)) return val.join(", ")
+      if (val !== undefined && val !== null) return String(val)
+      return "—"
+    } catch {
+      return "—"
+    }
   }
 
-  const handleConvertToStudent = async (response: FormResponse) => {
-    setConvertingId(response.id)
+  const handleConvertToStudent = async (student: Student) => {
+    setConvertingId(student.id)
     try {
-      const email = getField(response.data, "correo_electronico")
-      const fullName = getField(response.data, "nombre_completo")
-      const firstName = fullName.split(" ")[0] || ""
-      const lastName = fullName.split(" ").slice(1).join(" ") || ""
-
-      let studentId = response.studentId
-
-      if (!studentId) {
-        const existing = await pb.collection("students").getFullList<Student>({
-          filter: `email="${email}"`,
-        })
-        if (existing.length > 0) {
-          studentId = existing[0].id
-        } else {
-          const newStudent = await pb.collection("students").create({
-            email,
-            firstName,
-            lastName,
-            phone: getField(response.data, "telefono"),
-            empresa: getField(response.data, "empresa"),
-            puesto: getField(response.data, "puesto"),
-          })
-          studentId = newStudent.id
-          await pb.collection("inbox").update(response.id, { studentId })
-        }
-      }
-
       const diplomados = await pb.collection("diplomados").getFullList()
       const diplomadoId = diplomados[0]?.id || ""
 
+      const existing = await pb.collection("enrollments").getFullList({
+        filter: `studentId="${student.id}"`,
+      })
+
+      if (existing.length > 0) {
+        toast.info("Este estudiante ya tiene una inscripción")
+        setConvertingId(null)
+        return
+      }
+
       await pb.collection("enrollments").create({
-        studentId,
+        studentId: student.id,
         diplomadoId,
         status: "PENDING_PAYMENT",
         paymentAmount: 5000,
       })
 
-      toast.success(`${firstName} ${lastName} convertido a estudiante`)
+      toast.success(`${student.firstName} ${student.lastName} inscrito correctamente`)
       fetchResponses()
     } catch (e) {
-      const msg = (e as { message?: string })?.message || ""
-      if (msg.includes("Ya existe")) {
-        toast.info("Este estudiante ya tiene una inscripción")
-      } else {
-        toast.error("Error al convertir en estudiante")
-      }
+      toast.error("Error al crear inscripción")
     } finally {
       setConvertingId(null)
     }
@@ -134,16 +115,16 @@ export default function FormResponsesPage() {
               {responses.map((r) => (
                 <tr key={r.id} className="border-b border-border">
                   <td className="px-4 py-3 font-medium">
-                    {getField(r.data, "nombre_completo")}
+                    {getField(r.formData, "nombre_completo")}
                   </td>
                   <td className="px-4 py-3 text-muted-foreground">
-                    {getField(r.data, "correo_electronico")}
+                    {getField(r.formData, "correo_electronico")}
                   </td>
                   <td className="px-4 py-3 text-muted-foreground">
-                    {getField(r.data, "telefono")}
+                    {getField(r.formData, "telefono")}
                   </td>
                   <td className="px-4 py-3 text-muted-foreground">
-                    {getField(r.data, "empresa")}
+                    {getField(r.formData, "empresa")}
                   </td>
                   <td className="px-4 py-3 text-muted-foreground">
                     {r.created ? new Date(r.created).toLocaleDateString("es-MX") : "—"}
@@ -154,7 +135,7 @@ export default function FormResponsesPage() {
                       disabled={convertingId === r.id}
                       className="rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-white hover:bg-primary-dark disabled:opacity-50"
                     >
-                      {convertingId === r.id ? "Convirtiendo..." : "Convertir en estudiante"}
+                      {convertingId === r.id ? "Inscribiendo..." : "Crear inscripción"}
                     </button>
                   </td>
                 </tr>

@@ -71,6 +71,9 @@ export default function FormPage() {
       let studentId: string
       if (existingStudents.length > 0) {
         studentId = existingStudents[0].id
+        await pb.collection("students").update(studentId, {
+          formData: JSON.stringify(values),
+        })
       } else {
         const newStudent = await pb.collection("students").create({
           email,
@@ -79,15 +82,10 @@ export default function FormPage() {
           phone,
           empresa: values.empresa_organizacion || "",
           puesto: values.puesto_cargo || "",
+          formData: JSON.stringify(values),
         })
         studentId = newStudent.id
       }
-
-      await pb.collection("inbox").create({
-        formId: form.id,
-        studentId,
-        data: JSON.stringify(values),
-      })
 
       setSubmitted(true)
     } catch {
