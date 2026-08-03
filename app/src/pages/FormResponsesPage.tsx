@@ -6,7 +6,7 @@ interface FormResponse {
   id: string
   studentId: string
   formId: string
-  data: Record<string, string>
+  data: Record<string, unknown>
   created: string
 }
 
@@ -32,18 +32,27 @@ export default function FormResponsesPage() {
         sort: "-created",
       })
       setResponses(records)
-    } catch {
+    } catch (e) {
+      console.error("Form responses fetch error:", e)
       toast.error("Error al cargar respuestas")
     } finally {
       setLoading(false)
     }
   }
 
+  const getField = (data: Record<string, unknown>, key: string): string => {
+    const val = data[key]
+    if (typeof val === "string") return val
+    if (Array.isArray(val)) return val.join(", ")
+    if (val !== undefined && val !== null) return String(val)
+    return "—"
+  }
+
   const handleConvertToStudent = async (response: FormResponse) => {
     setConvertingId(response.id)
     try {
-      const email = response.data?.correo_electronico || ""
-      const fullName = response.data?.nombre_completo || ""
+      const email = getField(response.data, "correo_electronico")
+      const fullName = getField(response.data, "nombre_completo")
       const firstName = fullName.split(" ")[0] || ""
       const lastName = fullName.split(" ").slice(1).join(" ") || ""
 
@@ -60,12 +69,11 @@ export default function FormResponsesPage() {
             email,
             firstName,
             lastName,
-            phone: response.data?.telefono || "",
-            empresa: response.data?.empresa || "",
-            puesto: response.data?.puesto || "",
+            phone: getField(response.data, "telefono"),
+            empresa: getField(response.data, "empresa"),
+            puesto: getField(response.data, "puesto"),
           })
           studentId = newStudent.id
-
           await pb.collection("form_responses").update(response.id, { studentId })
         }
       }
@@ -125,19 +133,19 @@ export default function FormResponsesPage() {
               {responses.map((r) => (
                 <tr key={r.id} className="border-b border-border">
                   <td className="px-4 py-3 font-medium">
-                    {r.data?.nombre_completo || "—"}
+                    {getField(r.data, "nombre_completo")}
                   </td>
                   <td className="px-4 py-3 text-muted-foreground">
-                    {r.data?.correo_electronico || "—"}
+                    {getField(r.data, "correo_electronico")}
                   </td>
                   <td className="px-4 py-3 text-muted-foreground">
-                    {r.data?.telefono || "—"}
+                    {getField(r.data, "telefono")}
                   </td>
                   <td className="px-4 py-3 text-muted-foreground">
-                    {r.data?.empresa || "—"}
+                    {getField(r.data, "empresa")}
                   </td>
                   <td className="px-4 py-3 text-muted-foreground">
-                    {new Date(r.created).toLocaleDateString("es-MX")}
+                    {r.created ? new Date(r.created).toLocaleDateString("es-MX") : "—"}
                   </td>
                   <td className="px-4 py-3">
                     <button

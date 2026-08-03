@@ -31,12 +31,6 @@ export default function DashboardLayout() {
             >
               Estudiantes
             </button>
-            <button
-              onClick={() => navigate("/dashboard/classes")}
-              className={isActive("/dashboard/classes") ? "font-medium text-foreground" : "text-muted-foreground hover:text-foreground"}
-            >
-              Clases
-            </button>
             {isAdmin && (
               <a href="/_/" target="_blank" className="text-muted-foreground hover:text-foreground">
                 Admin PB
