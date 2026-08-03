@@ -6,7 +6,6 @@ migrate((app) => {
     "fields": [
       {
         "autogeneratePattern": "[a-z0-9]{15}",
-        "help": "",
         "hidden": false,
         "id": "text3208210256",
         "max": 15,
@@ -18,6 +17,58 @@ migrate((app) => {
         "required": true,
         "system": true,
         "type": "text"
+      },
+      {
+        "autogeneratePattern": "",
+        "hidden": false,
+        "id": "text_sid",
+        "max": 0,
+        "min": 0,
+        "name": "studentId",
+        "pattern": "",
+        "presentable": false,
+        "required": false,
+        "system": false,
+        "type": "text"
+      },
+      {
+        "autogeneratePattern": "",
+        "hidden": false,
+        "id": "text_did",
+        "max": 0,
+        "min": 0,
+        "name": "diplomadoId",
+        "pattern": "",
+        "presentable": false,
+        "required": false,
+        "system": false,
+        "type": "text"
+      },
+      {
+        "autogeneratePattern": "",
+        "hidden": false,
+        "id": "text_status",
+        "max": 0,
+        "min": 0,
+        "name": "status",
+        "pattern": "",
+        "presentable": false,
+        "required": false,
+        "system": false,
+        "type": "text"
+      },
+      {
+        "autogeneratePattern": "",
+        "hidden": false,
+        "id": "num_amt",
+        "max": null,
+        "min": null,
+        "name": "paymentAmount",
+        "onlyInt": false,
+        "presentable": false,
+        "required": false,
+        "system": false,
+        "type": "number"
       }
     ],
     "id": "pbc_1009377862",
@@ -33,6 +84,5 @@ migrate((app) => {
   return app.save(collection);
 }, (app) => {
   const collection = app.findCollectionByNameOrId("pbc_1009377862");
-
   return app.delete(collection);
 })

@@ -6,7 +6,6 @@ migrate((app) => {
     "fields": [
       {
         "autogeneratePattern": "[a-z0-9]{15}",
-        "help": "",
         "hidden": false,
         "id": "text3208210256",
         "max": 15,
@@ -17,6 +16,69 @@ migrate((app) => {
         "primaryKey": true,
         "required": true,
         "system": true,
+        "type": "text"
+      },
+      {
+        "autogeneratePattern": "",
+        "hidden": false,
+        "id": "text_ctitle",
+        "max": 0,
+        "min": 0,
+        "name": "title",
+        "pattern": "",
+        "presentable": false,
+        "required": false,
+        "system": false,
+        "type": "text"
+      },
+      {
+        "autogeneratePattern": "",
+        "hidden": false,
+        "id": "text_cdesc",
+        "max": 0,
+        "min": 0,
+        "name": "description",
+        "pattern": "",
+        "presentable": false,
+        "required": false,
+        "system": false,
+        "type": "text"
+      },
+      {
+        "hidden": false,
+        "id": "date_datetime",
+        "max": "",
+        "min": "",
+        "name": "datetime",
+        "presentable": false,
+        "required": false,
+        "system": false,
+        "type": "date"
+      },
+      {
+        "autogeneratePattern": "",
+        "hidden": false,
+        "id": "url_meet",
+        "max": 0,
+        "min": 0,
+        "name": "meetingUrl",
+        "pattern": "",
+        "presentable": false,
+        "required": false,
+        "system": false,
+        "type": "url"
+      },
+      {
+        "autogeneratePattern": "",
+        "hidden": false,
+        "id": "text_cdid",
+        "max": 0,
+        "min": 0,
+        "name": "diplomadoId",
+        "pattern": "",
+        "presentable": false,
+        "required": false,
+        "system": false,
         "type": "text"
       }
     ],
@@ -33,6 +95,5 @@ migrate((app) => {
   return app.save(collection);
 }, (app) => {
   const collection = app.findCollectionByNameOrId("pbc_2478702895");
-
   return app.delete(collection);
 })

@@ -6,7 +6,6 @@ migrate((app) => {
     "fields": [
       {
         "autogeneratePattern": "[a-z0-9]{15}",
-        "help": "",
         "hidden": false,
         "id": "text3208210256",
         "max": 15,
@@ -17,6 +16,45 @@ migrate((app) => {
         "primaryKey": true,
         "required": true,
         "system": true,
+        "type": "text"
+      },
+      {
+        "autogeneratePattern": "",
+        "hidden": false,
+        "id": "text_rtitle",
+        "max": 0,
+        "min": 0,
+        "name": "title",
+        "pattern": "",
+        "presentable": false,
+        "required": false,
+        "system": false,
+        "type": "text"
+      },
+      {
+        "autogeneratePattern": "",
+        "hidden": false,
+        "id": "url_rec",
+        "max": 0,
+        "min": 0,
+        "name": "url",
+        "pattern": "",
+        "presentable": false,
+        "required": false,
+        "system": false,
+        "type": "url"
+      },
+      {
+        "autogeneratePattern": "",
+        "hidden": false,
+        "id": "text_rcid",
+        "max": 0,
+        "min": 0,
+        "name": "classId",
+        "pattern": "",
+        "presentable": false,
+        "required": false,
+        "system": false,
         "type": "text"
       }
     ],
@@ -33,6 +71,5 @@ migrate((app) => {
   return app.save(collection);
 }, (app) => {
   const collection = app.findCollectionByNameOrId("pbc_392670462");
-
   return app.delete(collection);
 })
