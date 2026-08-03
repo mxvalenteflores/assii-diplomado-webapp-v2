@@ -52,7 +52,7 @@ onRecordAfterCreateSuccess((e) => {
   const record = e.record
   const colName = record.collection()?.name
 
-  if (colName === "form_responses") {
+  if (colName === "submissions") {
     const data = record.get("data") || {}
     const email = data.correo_electronico
     const name = data.nombre_completo
