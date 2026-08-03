@@ -21,7 +21,8 @@ interface Diplomado {
   name: string
 }
 
-const WHATSAPP_NUMBER = "521XXXXXXXXXX"
+const WHATSAPP_NUMBER = "529934618242"
+const WHATSAPP_MESSAGE = "Hola, acabo de responder el formulario de inscripcion."
 
 export default function FormPage() {
   const { diplomado } = useParams<{ diplomado: string }>()
@@ -115,8 +116,8 @@ export default function FormPage() {
   }
 
   if (submitted) {
-    const waMessage = encodeURIComponent("Hola, me acabo de registrar en el diplomado.")
-    const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${waMessage}`
+    const waMessage = encodeURIComponent(WHATSAPP_MESSAGE)
+    const waUrl = `https://api.whatsapp.com/send/?phone=${WHATSAPP_NUMBER}&text=${waMessage}`
 
     return (
       <div className="flex min-h-screen items-center justify-center bg-background p-4">
