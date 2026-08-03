@@ -20,9 +20,9 @@ createRoot(document.getElementById("root")!).render(
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/forms/:diplomado" element={<FormPage />} />
-        <Route path="/dashboard" element={<ProtectedRoute />}>
-          <Route element={<DashboardLayout />}>
-            <Route index element={<Navigate to="/dashboard/responses" replace />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<DashboardLayout />}>
+            <Route index element={<Navigate to="responses" replace />} />
             <Route path="responses" element={<FormResponsesPage />} />
             <Route path="students" element={<StudentsPage />} />
             <Route path="students/:enrollmentId" element={<StudentDetail />} />

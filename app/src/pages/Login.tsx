@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, Navigate } from "react-router-dom"
 import { toast } from "sonner"
 import { pb } from "../lib/pb"
 
@@ -24,8 +24,7 @@ export default function Login() {
   }
 
   if (pb.authStore.isValid) {
-    navigate("/dashboard", { replace: true })
-    return null
+    return <Navigate to="/dashboard" replace />
   }
 
   return (
