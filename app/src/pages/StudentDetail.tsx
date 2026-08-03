@@ -21,9 +21,6 @@ interface Enrollment {
   studentId: string
   diplomadoId: string
   created: string
-  expand?: {
-    studentId: Student
-  }
 }
 
 interface Payment {
@@ -38,10 +35,8 @@ interface Payment {
 interface FormResponse {
   id: string
   data: Record<string, unknown>
+  formId: string
   created: string
-  expand?: {
-    formId: { id: string; title: string; fields: Array<{ name: string; label: string }> }
-  }
 }
 
 const STATUS_LABELS: Record<string, string> = {
@@ -63,8 +58,10 @@ export default function StudentDetail() {
   const { enrollmentId } = useParams<{ enrollmentId: string }>()
   const navigate = useNavigate()
   const [enrollment, setEnrollment] = useState<Enrollment | null>(null)
+  const [student, setStudent] = useState<Student | null>(null)
   const [payments, setPayments] = useState<Payment[]>([])
   const [responses, setResponses] = useState<FormResponse[]>([])
+  const [formConfigs, setFormConfigs] = useState<Record<string, { title: string; fields: Array<{ name: string; label: string }> }>>({})
   const [loading, setLoading] = useState(true)
   const [showPaymentModal, setShowPaymentModal] = useState(false)
   const [paymentAmount, setPaymentAmount] = useState("")
@@ -76,25 +73,37 @@ export default function StudentDetail() {
     const fetchData = async () => {
       if (!enrollmentId) return
       try {
-        const e = await pb.collection("enrollments").getOne<Enrollment>(enrollmentId, {
-          expand: "studentId",
-        })
+        const e = await pb.collection("enrollments").getOne<Enrollment>(enrollmentId)
         setEnrollment(e)
+
+        if (e.studentId) {
+          const s = await pb.collection("students").getOne<Student>(e.studentId)
+          setStudent(s)
+
+          const r = await pb.collection("form_responses").getFullList<FormResponse>({
+            filter: `studentId="${e.studentId}"`,
+            sort: "-created",
+          })
+          setResponses(r)
+
+          const formIds = [...new Set(r.map((resp) => resp.formId).filter(Boolean))]
+          if (formIds.length > 0) {
+            const forms = await pb.collection("forms").getFullList<{ id: string; title: string; fields: Array<{ name: string; label: string }> }>({
+              filter: formIds.map((id) => `id="${id}"`).join("||"),
+            })
+            const configs: Record<string, { title: string; fields: Array<{ name: string; label: string }> }> = {}
+            for (const f of forms) {
+              configs[f.id] = { title: f.title, fields: f.fields }
+            }
+            setFormConfigs(configs)
+          }
+        }
 
         const p = await pb.collection("payments").getFullList<Payment>({
           filter: `enrollmentId="${enrollmentId}"`,
           sort: "-created",
         })
         setPayments(p)
-
-        if (e.studentId) {
-          const r = await pb.collection("form_responses").getFullList<FormResponse>({
-            filter: `studentId="${e.studentId}"`,
-            expand: "formId",
-            sort: "-created",
-          })
-          setResponses(r)
-        }
       } catch {
         navigate("/dashboard")
       } finally {
@@ -200,8 +209,6 @@ export default function StudentDetail() {
 
   if (loading) return <div className="p-8 text-center text-muted-foreground">Cargando...</div>
   if (!enrollment) return null
-
-  const student = enrollment.expand?.studentId
 
   return (
     <div className="min-h-screen bg-background">
@@ -361,11 +368,11 @@ export default function StudentDetail() {
             responses.map((r) => (
               <div key={r.id} className="mb-4 rounded-xl border border-border bg-white p-4">
                 <p className="mb-2 text-sm font-medium">
-                  {r.expand?.formId?.title || "Formulario"} —{" "}
+                  {formConfigs[r.formId]?.title || "Formulario"} —{" "}
                   {new Date(r.created).toLocaleDateString("es-MX")}
                 </p>
                 <dl className="grid grid-cols-2 gap-2 text-sm">
-                  {r.expand?.formId?.fields?.map((field) => (
+                  {formConfigs[r.formId]?.fields?.map((field) => (
                     <div key={field.name}>
                       <dt className="text-muted-foreground">{field.label}</dt>
                       <dd className="font-medium">

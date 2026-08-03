@@ -5,15 +5,15 @@ import { pb } from "../lib/pb"
 interface Enrollment {
   id: string
   status: string
+  studentId: string
   created: string
-  expand?: {
-    studentId: {
-      id: string
-      email: string
-      firstName: string
-      lastName: string
-    }
-  }
+}
+
+interface Student {
+  id: string
+  email: string
+  firstName: string
+  lastName: string
 }
 
 const STATUS_LABELS: Record<string, string> = {
@@ -35,7 +35,7 @@ const STATUS_COLORS: Record<string, string> = {
 }
 
 export default function Dashboard() {
-  const [enrollments, setEnrollments] = useState<Enrollment[]>([])
+  const [enrollments, setEnrollments] = useState<(Enrollment & { _student?: Student })[]>([])
   const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
 
@@ -44,9 +44,18 @@ export default function Dashboard() {
       try {
         const records = await pb.collection("enrollments").getFullList<Enrollment>({
           sort: "-created",
-          expand: "studentId",
         })
-        setEnrollments(records)
+
+        const studentIds = [...new Set(records.map((e) => e.studentId).filter(Boolean))]
+        let studentsMap: Record<string, Student> = {}
+        if (studentIds.length > 0) {
+          const students = await pb.collection("students").getFullList<Student>({
+            filter: studentIds.map((id) => `id="${id}"`).join("||"),
+          })
+          studentsMap = Object.fromEntries(students.map((s) => [s.id, s]))
+        }
+
+        setEnrollments(records.map((e) => ({ ...e, _student: studentsMap[e.studentId] })))
       } catch {
         pb.authStore.clear()
         navigate("/login")
@@ -120,12 +129,12 @@ export default function Dashboard() {
                     className="cursor-pointer border-b border-border transition hover:bg-muted/30"
                   >
                     <td className="px-4 py-3">
-                      {e.expand?.studentId
-                        ? `${e.expand.studentId.firstName} ${e.expand.studentId.lastName}`
+                      {e._student
+                        ? `${e._student.firstName} ${e._student.lastName}`
                         : "—"}
                     </td>
                     <td className="px-4 py-3 text-muted-foreground">
-                      {e.expand?.studentId?.email || "—"}
+                      {e._student?.email || "—"}
                     </td>
                     <td className="px-4 py-3">
                       <span

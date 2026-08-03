@@ -10,9 +10,6 @@ interface Clase {
   date: string
   meetingUrl: string
   status: string
-  expand?: {
-    recordings: Recording[]
-  }
 }
 
 interface Recording {
@@ -20,16 +17,18 @@ interface Recording {
   title: string
   url: string
   duration: string
+  classId: string
 }
 
 const getDiplomadoId = async () => {
-  const records = await pb.collection("diplomados").getFullList({ filter: "status='PUBLISHED'" })
+  const records = await pb.collection("diplomados").getFullList()
   return records[0]?.id || ""
 }
 
 export default function ClassesPage() {
   const navigate = useNavigate()
   const [classes, setClasses] = useState<Clase[]>([])
+  const [recordingsByClass, setRecordingsByClass] = useState<Record<string, Recording[]>>({})
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
   const [editing, setEditing] = useState<Clase | null>(null)
@@ -47,10 +46,24 @@ export default function ClassesPage() {
       const dipId = await getDiplomadoId()
       const records = await pb.collection("classes").getFullList<Clase>({
         filter: `diplomadoId="${dipId}"`,
-        expand: "recordings",
         sort: "+date",
       })
       setClasses(records)
+
+      // Fetch recordings for all classes
+      const classIds = records.map((c) => c.id)
+      if (classIds.length > 0) {
+        const recs = await pb.collection("recordings").getFullList<Recording>({
+          filter: classIds.map((id) => `classId="${id}"`).join("||"),
+          sort: "+created",
+        })
+        const map: Record<string, Recording[]> = {}
+        for (const r of recs) {
+          if (!map[r.classId]) map[r.classId] = []
+          map[r.classId].push(r)
+        }
+        setRecordingsByClass(map)
+      }
     } catch {
       pb.authStore.clear()
       navigate("/login")
@@ -226,10 +239,10 @@ export default function ClassesPage() {
                   </div>
                 </div>
 
-                {c.expand?.recordings && c.expand.recordings.length > 0 && (
+                {recordingsByClass[c.id] && recordingsByClass[c.id].length > 0 && (
                   <div className="mt-3 border-t border-border pt-3">
                     <p className="mb-2 text-xs font-medium text-muted-foreground">Grabaciones</p>
-                    {c.expand.recordings.map((r) => (
+                    {recordingsByClass[c.id].map((r) => (
                       <div key={r.id} className="flex items-center justify-between py-1 text-sm">
                         <a
                           href={r.url}
