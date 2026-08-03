@@ -34,7 +34,7 @@ interface Payment {
 
 interface FormResponse {
   id: string
-  data: Record<string, unknown>
+  data: string | Record<string, unknown>
   formId: string
   created: string
 }
@@ -365,16 +365,19 @@ export default function StudentDetail() {
                   {new Date(r.created).toLocaleDateString("es-MX")}
                 </p>
                 <dl className="grid grid-cols-2 gap-2 text-sm">
-                  {formConfigs[r.formId]?.fields?.map((field) => (
+                  {formConfigs[r.formId]?.fields?.map((field) => {
+                    const parsedData: Record<string, unknown> = typeof r.data === "string" ? JSON.parse(r.data) : r.data
+                    return (
                     <div key={field.name}>
                       <dt className="text-muted-foreground">{field.label}</dt>
                       <dd className="font-medium">
-                        {Array.isArray(r.data[field.name])
-                          ? (r.data[field.name] as string[]).join(", ")
-                          : String(r.data[field.name] ?? "—")}
+                        {Array.isArray(parsedData[field.name])
+                          ? (parsedData[field.name] as string[]).join(", ")
+                          : String(parsedData[field.name] ?? "—")}
                       </dd>
                     </div>
-                  ))}
+                    )
+                  })}
                 </dl>
               </div>
             ))

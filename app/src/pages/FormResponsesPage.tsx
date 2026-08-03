@@ -6,7 +6,7 @@ interface FormResponse {
   id: string
   studentId: string
   formId: string
-  data: Record<string, unknown>
+  data: string | Record<string, unknown>
   created: string
 }
 
@@ -40,7 +40,8 @@ export default function FormResponsesPage() {
     }
   }
 
-  const getField = (data: Record<string, unknown>, key: string): string => {
+  const getField = (rawData: string | Record<string, unknown>, key: string): string => {
+    const data = typeof rawData === "string" ? JSON.parse(rawData) : rawData
     const val = data[key]
     if (typeof val === "string") return val
     if (Array.isArray(val)) return val.join(", ")

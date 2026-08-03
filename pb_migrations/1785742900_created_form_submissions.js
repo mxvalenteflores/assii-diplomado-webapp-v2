@@ -48,13 +48,14 @@ migrate((app) => {
       },
       {
         "hidden": false,
-        "id": "json2918445923",
-        "maxSize": 0,
+        "id": "text724990061",
+        "max": 0,
+        "min": 0,
         "name": "data",
         "presentable": false,
         "required": false,
         "system": false,
-        "type": "json"
+        "type": "text"
       }
     ],
     "id": "pbc_3596961635",

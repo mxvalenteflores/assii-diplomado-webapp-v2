@@ -85,7 +85,7 @@ export default function FormPage() {
       await pb.collection("form_submissions").create({
         formId: form.id,
         studentId,
-        data: values,
+        data: JSON.stringify(values),
       })
 
       setSubmitted(true)
