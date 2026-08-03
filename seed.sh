@@ -108,21 +108,21 @@ if [ "$EXISTING_FORM" = "0" ]; then
       \"diplomadoId\":\"$DIP_ID\",
       \"isActive\":true,
       \"fields\":[
-        {\"name\":\"nombre_completo\",\"label\":\"Nombre completo\",\"type\":\"text\",\"required\":true},
-        {\"name\":\"correo_electronico\",\"label\":\"Correo electronico\",\"type\":\"email\",\"required\":true},
-        {\"name\":\"telefono\",\"label\":\"Telefono\",\"type\":\"tel\",\"required\":true},
-        {\"name\":\"empresa\",\"label\":\"Empresa / Organizacion\",\"type\":\"text\",\"required\":false},
-        {\"name\":\"puesto\",\"label\":\"Puesto / Cargo\",\"type\":\"text\",\"required\":false},
-        {\"name\":\"nivel_estudios\",\"label\":\"Nivel maximo de estudios\",\"type\":\"select\",\"required\":true,\"options\":[\"Bachillerato\",\"Licenciatura\",\"Maestria\",\"Doctorado\"]},
-        {\"name\":\"experiencia_sst\",\"label\":\"Anios de experiencia en SST\",\"type\":\"select\",\"required\":true,\"options\":[\"Menos de 1\",\"1-3\",\"4-6\",\"7-10\",\"Mas de 10\"]},
-        {\"name\":\"conocimientos_previos\",\"label\":\"Conocimientos previos en gestion de SST\",\"type\":\"scale\",\"required\":true},
-        {\"name\":\"motivacion\",\"label\":\"Por que te interesa este diplomado?\",\"type\":\"textarea\",\"required\":true},
-        {\"name\":\"expectativas\",\"label\":\"Que esperas aprender?\",\"type\":\"textarea\",\"required\":false},
-        {\"name\":\"tipo_participante\",\"label\":\"Tipo de participante\",\"type\":\"radio\",\"required\":true,\"options\":[\"Empresa\",\"Independiente\",\"Estudiante\"]},
-        {\"name\":\"areas_interes\",\"label\":\"Areas de interes\",\"type\":\"checkbox\",\"required\":false,\"options\":[\"Legislacion SST\",\"Auditorias\",\"Cultura organizacional\",\"Indicadores\",\"Gestion de riesgos\"]},
-        {\"name\":\"como_se_entero\",\"label\":\"Como se entero del diplomado?\",\"type\":\"select\",\"required\":true,\"options\":[\"LinkedIn\",\"Facebook\",\"Recomendacion\",\"Google\",\"Correo electronico\",\"Otro\"]},
-        {\"name\":\"factura\",\"label\":\"Requiere factura?\",\"type\":\"radio\",\"required\":true,\"options\":[\"Si\",\"No\"]},
-        {\"name\":\"comentarios\",\"label\":\"Comentarios adicionales\",\"type\":\"textarea\",\"required\":false}
+        {\"name\":\"acepto_privacidad\",\"label\":\"Acepta los terminos del aviso de privacidad para el uso y tratamiento de sus datos personales?\",\"type\":\"radio\",\"required\":true,\"options\":[\"Si, he leido y acepto el aviso de privacidad.\"]},
+        {\"name\":\"nombre_completo\",\"label\":\"Nombre completo (Como desea que aparezca en la documentacion oficial)\",\"type\":\"text\",\"required\":true},
+        {\"name\":\"correo_electronico\",\"label\":\"Correo electronico principal\",\"type\":\"email\",\"required\":true},
+        {\"name\":\"telefono\",\"label\":\"Numero de telefono celular (para WhatsApp)\",\"type\":\"tel\",\"required\":true},
+        {\"name\":\"nivel_estudios\",\"label\":\"Ultimo grado de estudios\",\"type\":\"select\",\"required\":true,\"options\":[\"Primaria\",\"Secundaria\",\"Media Superior\",\"Universidad\",\"Postgrado\"]},
+        {\"name\":\"carrera_especialidad\",\"label\":\"En caso de Universidad o Postgrado, indique cual es su carrera o especialidad\",\"type\":\"text\",\"required\":false},
+        {\"name\":\"empresa\",\"label\":\"Empresa, Organizacion o Institucion de procedencia\",\"type\":\"text\",\"required\":true},
+        {\"name\":\"puesto\",\"label\":\"Puesto o cargo actual\",\"type\":\"text\",\"required\":true},
+        {\"name\":\"pertenece_institucion\",\"label\":\"Forma parte de alguna de las siguientes instituciones?\",\"type\":\"radio\",\"required\":true,\"options\":[\"Si, pertenezco al REDVITAB o Institucion Educativa con convenio ASSII\",\"Si, pertenezco a una Empresa del COCOESST\",\"Si, pertenezco a un Sindicato del COCOESST\",\"Si, pertenezco a COPARMEX Tabasco\",\"Si, pertenezco a International Lean Six Sigma Group\",\"No, no pertenezco a ninguna\"]},
+        {\"name\":\"esquema_pago\",\"label\":\"Seleccion de Esquema de Inversion y Pago\",\"type\":\"radio\",\"required\":true,\"options\":[\"Pago unico - Publico General: 10% de descuento ($9,000.00 MXN) - Transferencia a Scotiabank\",\"Pago unico - Comunidad ASSII: 30% de descuento ($7,000.00 MXN) - Transferencia a Scotiabank\",\"6 Meses sin intereses - Publico General: Sin descuento ($1,667.00 MXN mensuales)\",\"6 meses sin intereses - Comunidad ASSII: 25% de descuento ($1,250.00 MXN mensuales)\"]},
+        {\"name\":\"factura\",\"label\":\"Requerira comprobante fiscal (Factura / CFDI) por su inversion?\",\"type\":\"radio\",\"required\":true,\"options\":[\"Si, requiero factura\",\"No requiero factura\"]},
+        {\"name\":\"expectativa\",\"label\":\"Cual es su expectativa a alcanzar con respecto al Diplomado?\",\"type\":\"radio\",\"required\":true,\"options\":[\"Mejorar mi rol actual en SST\",\"Aspirar a un puesto de mayor jerarquia gerencial\",\"Asegurar el cumplimiento normativo en mi organizacion\",\"Obtener un conocimiento formal y una constancia/diploma\",\"Networking con otros profesionales del sector\"]},
+        {\"name\":\"nivel_conocimiento\",\"label\":\"Como evalua su nivel actual de conocimiento en Competencias Gerenciales aplicadas a la GSST?\",\"type\":\"scale\",\"required\":true},
+        {\"name\":\"tema_critico\",\"label\":\"Cual de los siguientes temas de SST considera mas critico para su desarrollo profesional?\",\"type\":\"radio\",\"required\":true,\"options\":[\"Liderazgo y Cultura de Seguridad\",\"Gestion de Riesgos Psicosociales\",\"Cumplimiento Normativo (NOMs y Legislacion)\",\"Investigacion de Accidentes y Analisis Causa Raiz\",\"Auditorias y Sistemas de Gestion (ISO 45001)\"]},
+        {\"name\":\"comentarios\",\"label\":\"Comentarios adicionales o dudas\",\"type\":\"textarea\",\"required\":false}
       ]
     }" > /dev/null 2>&1
   echo "Form created."

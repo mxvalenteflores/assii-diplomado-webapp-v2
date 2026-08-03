@@ -61,7 +61,7 @@ export default function FormPage() {
     const email = values.correo_electronico || ""
     const firstName = values.nombre_completo?.split(" ")[0] || ""
     const lastName = values.nombre_completo?.split(" ").slice(1).join(" ") || ""
-    const phone = values.telefono_celular || ""
+    const phone = values.telefono || ""
 
     try {
       const existingStudents = await pb.collection("students").getList(1, 1000, {
@@ -80,8 +80,8 @@ export default function FormPage() {
           firstName,
           lastName,
           phone,
-          empresa: values.empresa_organizacion || "",
-          puesto: values.puesto_cargo || "",
+          empresa: values.empresa || "",
+          puesto: values.puesto || "",
           formData: JSON.stringify(values),
         })
         studentId = newStudent.id
@@ -333,6 +333,12 @@ export default function FormPage() {
               {renderField(field)}
             </div>
           ))}
+
+          <div className="rounded-lg bg-blue-50 border border-blue-100 p-4 text-sm text-muted-foreground">
+            <p className="font-medium text-primary mb-1">Información administrativa</p>
+            <p>La gestión de la inversión al inscribirse al diplomado está administrada por <strong>Grupo ISIBSA MX</strong>. Una vez enviado el formulario, recibirá un correo electrónico con los detalles administrativos, datos bancarios y políticas de facturación.</p>
+          </div>
+
           <button
             type="submit"
             className="w-full rounded-lg bg-primary py-3 text-sm font-medium text-white transition hover:bg-primary-dark"
