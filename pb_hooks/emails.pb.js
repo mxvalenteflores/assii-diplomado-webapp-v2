@@ -96,12 +96,15 @@ onRecordAfterCreateSuccess(function(e) {
           "Hola " + (name || "") + ",\n\nHemos recibido tu inscripci\u00f3n al Diplomado en Competencias Gerenciales para la Gesti\u00f3n de la SST.\n\nEn breve recibir\u00e1s instrucciones para completar tu proceso de inscripci\u00f3n.\n\nSaludos,\nEquipo ASSII",
           html
         )
-      }
 
-      notifyAdmins(
-        "Nueva inscripci\u00f3n recibida",
-        (name || "Alguien") + " se ha inscrito al diplomado."
-      )
+        // Inline admin notification (Goja closure workaround)
+        try {
+          var admins = $app.findRecordsByFilter("admins", "", "", 0, 0)
+          for (var ai = 0; ai < admins.length; ai++) {
+            sendEmail(admins[ai].get("email"), "Nueva inscripci\u00f3n recibida", (name || "Alguien") + " se ha inscrito al diplomado.")
+          }
+        } catch (_) {}
+      }
     } catch (e) {
       console.error("[STUDENT EMAIL ERROR]", String(e))
     }
