@@ -84,12 +84,14 @@ export default function StudentsPage() {
       }
 
       setStudents(
-        studentList.map((s) => ({
-          ...s,
-          enrollmentStatus: enrollMap[s.id]?.status,
-          enrollmentId: enrollMap[s.id]?.id,
-          totalPaid: paidMap[s.id] || 0,
-        }))
+        studentList
+          .filter((s) => enrollMap[s.id])
+          .map((s) => ({
+            ...s,
+            enrollmentStatus: enrollMap[s.id].status,
+            enrollmentId: enrollMap[s.id].id,
+            totalPaid: paidMap[s.id] || 0,
+          }))
       )
     } catch {
     } finally {

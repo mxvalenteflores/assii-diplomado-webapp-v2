@@ -5,23 +5,25 @@ const inbox = "arqonlabs%40agentmail.to"
 
 function sendEmail(to, subject, text, html) {
   if (!agentmailKey) {
-    console.log("[EMAIL MOCK]", { to, subject, text: text?.slice(0, 80) })
+    console.log("[EMAIL MOCK]", to, subject)
     return
   }
   try {
-    const body = { to, subject, text: text || "" }
-    if (html) body.html = html
-    $http.send({
+    const payload = { to, subject, text: text || "" }
+    if (html) payload.html = html
+    const resp = $http.send({
       url: `https://api.agentmail.to/v0/inboxes/${inbox}/messages/send`,
       method: "POST",
       headers: {
         Authorization: `Bearer ${agentmailKey}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify(payload),
+      timeout: 15,
     })
+    console.log("[EMAIL SENT]", to, resp.statusCode)
   } catch (e) {
-    console.error("[EMAIL ERROR]", e)
+    console.error("[EMAIL ERROR]", to, e)
   }
 }
 

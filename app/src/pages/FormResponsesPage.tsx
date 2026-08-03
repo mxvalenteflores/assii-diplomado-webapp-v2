@@ -15,8 +15,14 @@ interface Student {
   created: string
 }
 
+interface Enrollment {
+  id: string
+  studentId: string
+}
+
 export default function FormResponsesPage() {
   const [responses, setResponses] = useState<Student[]>([])
+  const [enrolledIds, setEnrolledIds] = useState<Set<string>>(new Set())
   const [loading, setLoading] = useState(true)
   const [convertingId, setConvertingId] = useState<string | null>(null)
   const navigate = useNavigate()
@@ -27,10 +33,14 @@ export default function FormResponsesPage() {
 
   const fetchResponses = async () => {
     try {
-      const result = await pb.collection("students").getList<Student>(1, 1000, {
-        sort: "-created",
-      })
-      setResponses(result.items.filter((s) => s.formData && s.formData !== ""))
+      const [studentRes, enrollmentRes] = await Promise.all([
+        pb.collection("students").getList<Student>(1, 1000, { sort: "-created" }),
+        pb.collection("enrollments").getList<Enrollment>(1, 5000),
+      ])
+
+      const enrolled = new Set(enrollmentRes.items.map((e) => e.studentId).filter(Boolean))
+      setEnrolledIds(enrolled)
+      setResponses(studentRes.items.filter((s) => s.formData && s.formData !== ""))
     } catch {
     } finally {
       setLoading(false)
@@ -51,21 +61,12 @@ export default function FormResponsesPage() {
     }
   }
 
-  const handleConvertToStudent = async (student: Student) => {
+  const handleCreateStudent = async (student: Student) => {
+    if (enrolledIds.has(student.id)) return
     setConvertingId(student.id)
     try {
       const diplomados = await pb.collection("diplomados").getList(1, 1000, {})
       const diplomadoId = diplomados.items[0]?.id || ""
-
-      const existing = await pb.collection("enrollments").getList(1, 1000, {
-        filter: `studentId="${student.id}"`,
-      })
-
-      if (existing.items.length > 0) {
-        toast.info("Este estudiante ya tiene una inscripción")
-        setConvertingId(null)
-        return
-      }
 
       await pb.collection("enrollments").create({
         studentId: student.id,
@@ -74,10 +75,10 @@ export default function FormResponsesPage() {
         paymentAmount: 5000,
       })
 
-      toast.success(`${student.firstName} ${student.lastName} inscrito correctamente`)
-      fetchResponses()
-    } catch (e) {
-      toast.error("Error al crear inscripción")
+      setEnrolledIds((prev) => new Set([...prev, student.id]))
+      toast.success(`${student.firstName} ${student.lastName} ahora es estudiante`)
+    } catch {
+      toast.error("Error al crear estudiante")
     } finally {
       setConvertingId(null)
     }
@@ -111,7 +112,9 @@ export default function FormResponsesPage() {
               </tr>
             </thead>
             <tbody>
-              {responses.map((r) => (
+              {responses.map((r) => {
+                const isEnrolled = enrolledIds.has(r.id)
+                return (
                 <tr
                   key={r.id}
                   onClick={() => navigate(`/dashboard/responses/${r.id}`)}
@@ -134,15 +137,20 @@ export default function FormResponsesPage() {
                   </td>
                   <td className="px-4 py-3">
                     <button
-                      onClick={(e) => { e.stopPropagation(); handleConvertToStudent(r) }}
-                      disabled={convertingId === r.id}
-                      className="rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-white hover:bg-primary-dark disabled:opacity-50"
+                      onClick={(e) => { e.stopPropagation(); handleCreateStudent(r) }}
+                      disabled={isEnrolled || convertingId === r.id}
+                      className={`rounded-lg px-3 py-1.5 text-xs font-medium transition ${
+                        isEnrolled
+                          ? "cursor-not-allowed bg-gray-300 text-gray-500"
+                          : "bg-primary text-white hover:bg-primary-dark disabled:opacity-50"
+                      }`}
                     >
-                      {convertingId === r.id ? "Inscribiendo..." : "Crear inscripción"}
+                      {isEnrolled ? "Ya es estudiante" : convertingId === r.id ? "Creando..." : "Crear estudiante"}
                     </button>
                   </td>
                 </tr>
-              ))}
+                )
+              })}
             </tbody>
           </table>
         </div>
