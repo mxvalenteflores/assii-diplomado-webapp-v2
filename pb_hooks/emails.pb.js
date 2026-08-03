@@ -101,6 +101,7 @@ linkHtml +
 onRecordAfterCreateSuccess(function(e) {
   var record = e.record
   var colName = record.collection() ? record.collection().name : ""
+  console.log("[HOOK FIRED]", colName)
   var key = $os.getenv("AGENTMAIL_API_KEY") || ""
 
   if (colName === "students") {
