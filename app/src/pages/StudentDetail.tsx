@@ -30,7 +30,7 @@ interface Payment {
   id: string
   amount: number
   status: string
-  proofUrl: string
+  proof: string
   rejectionReason: string
   created: string
 }
@@ -194,8 +194,8 @@ export default function StudentDetail() {
   }
 
   const getProofUrl = (payment: Payment) => {
-    if (!payment.proofUrl) return null
-    return pb.files.getUrl(payment, payment.proofUrl)
+    if (!payment.proof) return null
+    return pb.files.getUrl(payment, payment.proof)
   }
 
   if (loading) return <div className="p-8 text-center text-muted-foreground">Cargando...</div>
@@ -293,7 +293,7 @@ export default function StudentDetail() {
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex gap-2">
-                          {p.proofUrl && (
+                          {p.proof && (
                             <a
                               href={getProofUrl(p)!}
                               target="_blank"

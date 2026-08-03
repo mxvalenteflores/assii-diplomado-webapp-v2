@@ -1,0 +1,14 @@
+dbs:
+  - path: /pb/pb_data/data.db
+    replicas:
+      - type: s3
+        endpoint: https://a4cfe5819f278c8c5d8fd6b5dcffc8ce.r2.cloudflarestorage.com
+        bucket: arqonlabs-assii-diplomados
+        path: backups
+        region: auto
+        access-key-id: 7460268d0899d188e34f63e6f6261cd1
+        secret-access-key: 7663c7a427d4b967f360825569f9c0083daebbff27086ce49a5733faa64ccb1d
+        force-path-style: true
+        sync-interval: 15m
+        retention: 720h
+        snapshot-interval: 24h
