@@ -1,0 +1,91 @@
+segmento,nombre,email,origen,organizacion,cargo
+A_DECISION,C. JAVIER MAY RODRÍGUEZ,contacto@javiermay.mx,COCOCESST,GOBIERNO DEL ESTADO DE TABASCO,GOBERNADOR DEL ESTADO DE TABASCO
+A_DECISION,LIC. CÉSAR A. ROJAS RABELO,dgtyps.segob@tabasco.gob.mx,COCOCESST,SECRETARÍA DE GOBIERNO DEL ESTADO DE TABASCO,DIRECTOR GENERAL DE LA DIRECCIÓN DEL TRABAJO Y PREVISIÓN SOCIAL
+A_DECISION,DR. ALEJANDRO CALDERÓN ALIPI,secretariaparticularsalud@gmail.com,COCOCESST,SECRETARÍA DE SALUD DEL ESTADO DE TABASCO,SECRETARIO DE SALUD DEL ESTADO DE TABASCO
+A_DECISION,SALVADOR HEREDIA DOMINGUEZ,iliana.castillo@semarnat.gob.mx,COCOCESST,SEMARNAT TABASCO,TITULAR DE LA OFICINA DE REPRESENTACIÓN EN TABASCO
+A_DECISION,DR. MARCOS DAVID CASTILLO,jose.orgaz@imss.gob.mx,COCOCESST,INSTITUTO MEXICANO DEL SEGURO SOCIAL (IMSS),TITULAR DE LA JEFATURA DE PRESTACIONES MEDICAS DEL ÓRGANO DE OPERACIÓN ADMINISTRATIVA DESCONCENTRADA EN TABASCO
+EXCLUIDO_EMAIL_INVALIDO,ING. CESAR PONCE PATIÑO,-,COCOCESST,INSTITUTO MEXICANO DEL SEGURO SOCIAL (IMSS),COORDINADOR AUXILIAR DE SEGURIDAD EN EL TRABAJO
+A_DECISION,MTRO. EDGAR AZCUAGA CABRERA,federacionde@hotmail.com,COCOCESST,FEDERACIÓN DE TRABAJADORES Y OBREROS DE TABASCO (FTOT),SECRETARIO GENERAL
+A_DECISION,LIC. CARLOS ALBERTO NORIEGA RAMÓN,lic.albertonoriega@hotmail.com,COCOCESST,"SINDICATO DE EMPLEADOS DEL COMERCIO, SIMILARES Y CONEXOS DEL ESTADO DE TABASCO",SECRETARIO GENERAL
+A_DECISION,C. JAVIER FUERTE VALENCIA,seguridadcasval@hotmail.com,COCOCESST,CONFEDERACIÓN REGIONAL OBRERA MEXICANA (CROM),REPRESENTANTE SINDICAL
+A_DECISION,LIC. ALEJANDRO YESUGAI FRÍAS DÍAZ,presidenciatabasco@canacintra.org.mx,COCOCESST,CÁMARA NACIONAL DE LA INDUSTRIA Y LA TRANSFORMACIÓN (CANACINTRA) TABASCO,PRESIDENTE DE LA CÁMARA
+A_DECISION,LIC. NADIA VANESSA GÓMEZ REYES,tabasco@canacintra.org.mx,COCOCESST | REDVITAB,CÁMARA NACIONAL DE LA INDUSTRIA Y LA TRANSFORMACIÓN (CANACINTRA) TABASCO,DIRECTORA
+A_DECISION,MTRO. JOSÉ MARÍA BASTAR CAMELO,oficinapresidencia@coparmextabasco.org,COCOCESST,CONFEDERACIÓN PATRONAL DE LA REPÚBLICA MEXICANA (COPARMEX),PRESIDENTE DE LA DELEGACIÓN TABASCO
+A_DECISION,ING. ALEJANDRO BARRIGUETE BORELL,hola.alexborrell@gmail.com,COCOCESST | ASSII,ASSII,PRESIDENTE
+A_DECISION,MTRO. MARIO GIL PÉREZ,mariogilperez@gmail.com,COCOCESST | ASSII,ASSII,VICEPRESIDENTE
+A_DECISION,DR. JESÚS MANUEL ARGÁEZ DE LOS SANTOS,segobtabasco@gmail.com,COCOCESST,GOBIERNO DEL ESTADO DE TABASCO,TITULAR DE LA CONSEJERÍA JURÍDICA
+A_DECISION,LIC. CINTHYA MARTINEZ ESCOBAR,tabasco@centrolaboral.gob.mx,COCOCESST,CENTRO FEDERAL DE CONCILIACIÓN Y REGISTRO LABORAL,DIRECTORA EN TABASCO
+A_DECISION,LIC. KARLA GUADALUPE SEVILLA LIZÁRRAGA,centrolaboral.segob@tabasco.gob.mx,COCOCESST,CENTRO DE CONCILIACIÓN LABORAL DEL ESTADO DE TABASCO (CCLET),DIRECTORA
+A_DECISION,CARLA GEOMARA GONZÁLEZ MENDOZA,carla.gonzalez@finabien.gob.mx,COCOCESST,FINABIEN,ENCARGADA DE PROTECCIÓN CIVIL Y SEGURIDAD E HIGIENE
+A_DECISION,LIC. ALBERTO ZURITA DEL RIVERO,amhmt@destinotabasco.net,COCOCESST,"ASOCIACIÓN MEXICANA DE HOTELES Y MOTELES DE TABASCO, A.C.",PRESIDENTE
+A_DECISION,LIC. RAUL LANESTOSA HERNANDEZ,raul.lanestosa@stps.gob.mx,COCOCESST,SECRETARÍA DEL TRABAJO Y PREVISIÓN SOCIAL (STPS),COORDINADOR REGIONAL ZONA SUR 2
+A_DECISION,MTRO. JOSE MANUEL DEHESA MARTÍNEZ,dir_villahermosa@tecnm.mx,COCOCESST | REDVITAB,TECNOLÓGICO NACIONAL DE MÉXICO (TECNM) VILLAHERMOSA,DIRECTOR
+A_DECISION,LIC. GUILLERMO NARVÁEZ OSORIO,rectoria@ujat.mx,COCOCESST | REDVITAB,UNIVERSIDAD JUÁREZ AUTÓNOMA DE TABASCO (UJAT),RECTOR
+A_DECISION,LIC. BRENDA CABRERA JIMENEZ,brenda.jimenez@fonacot.gob.mx,COCOCESST,FONDO NACIONAL PARA EL CONSUMO DE LOS TRABAJADORES (FONACOT),DIRECTORA ESTATAL DEL FONDO NACIONAL PARA EL CONSUMO DE LOS TRABAJADORES EN TABASCO
+B_REDVITAB_ASSII,José Javier Torres Hernández,dir_zolmeca@tecnm.mx,REDVITAB,"Tecnológico Nacional de México, Zona Olmeca",Director General
+B_REDVITAB_ASSII,Noé Daniel Herrera Tomuco,dir_dvillaventa@tecnm.mx,REDVITAB,"Tecnológico Nacional de México, Campus Villa La Venta",Director General
+B_REDVITAB_ASSII,Lorenzo Chacón Pérez,dir_huimanguillo@tecnm.mx,REDVITAB,"Tecnológico Nacional de México, Campus Huimanguillo",Director General
+B_REDVITAB_ASSII,Audiel Hipólito Durán,direccion.villah@icestabasco.edu.mx,REDVITAB,Centro Integral de Estudios Profesionales,Director General
+B_REDVITAB_ASSII,José María Bastar Camelo,contacto@bastarcamelo.com,REDVITAB,Confederación Patronal de la República Mexicana del Estado de Tabasco,Presidente
+B_REDVITAB_ASSII,Lenin Martínez Pérez,secretariatecnica@uttab.edu.mx,REDVITAB,Universidad Tecnológica de Tabasco,Rector
+B_REDVITAB_ASSII,Felipe de Jesús Sánchez Arias,info@ccytet.gob.mx,REDVITAB,Consejo de Ciencia y Tecnología del Estado de Tabasco,Director General
+B_REDVITAB_ASSII,Flor De la Cruz González,rectoria@updelgolfo.mx,REDVITAB,Universidad Politécnica del Golfo de México,Rectora
+B_REDVITAB_ASSII,Manolo Gómez Morales,direccion@macuspana.tecnm.mx,REDVITAB,"Tecnológico Nacional de México, Campus Macuspana",Director
+B_REDVITAB_ASSII,Manuel Antonio Mayo Corzo,direccion@centla.tecnm.mx,REDVITAB,"Tecnológico Nacional de México, Campus Centla",Director General
+B_REDVITAB_ASSII,Gerardo Cabrera Parés,charricos@gmail.com,REDVITAB,"Charricos, S.A. de C.V.",Representante
+B_REDVITAB_ASSII,José Luis De la Cruz Córdova,rectoria@upch.mx,REDVITAB,Universidad Popular de la Chontalpa,Rector
+EXCLUIDO_EMAIL_INVALIDO,José Cisneros Domínguez,n/d,REDVITAB,Universidad Politécnica Mesoamericana,Rector
+B_REDVITAB_ASSII,Isidro Jiménez León,dir_dcomalcalco@tecnm.mx,REDVITAB,"Tecnológico Nacional de México, Campus Comalcalco",Director General
+B_REDVITAB_ASSII,Fernando Yris Hernández,direccion.general@cobatab.edu.mx,REDVITAB,Colegio de Bachilleres de Tabasco,Director General
+B_REDVITAB_ASSII,Guadalupe Aquino Jiménez,guadalupe.aquino@economia.gob.mx,REDVITAB,Secretaría de Economía,Titular de la Oficina
+B_REDVITAB_ASSII,Adrián Mendoza Bolaina,presidencia@cimetabasco.org.mx,REDVITAB,Colegio de Ingenieros Mecánicos y Electricistas de Tabasco,Presidente
+B_REDVITAB_ASSII,Patricia Iparrea Sánchez,despacho_setab@correo.setab.gob.mx,REDVITAB,Secretaría de Educación,Secretaria
+B_REDVITAB_ASSII,Octavio Hernández Rodriguez,conaleptabasco@tab.conalep.edu.mx,REDVITAB,Colegio de Educación Profesional Técnica de Tabasco,Director General
+B_REDVITAB_ASSII,Katia Ornelas Gil,talinaferrer@tabasco.gob.mx,REDVITAB,Secretaría de Turismo y Desarrollo Económico,Secretaria
+B_REDVITAB_ASSII,Sheila Guadalupe Cadena Nieto,sheilacadena@tabasco.gob.mx,REDVITAB,Secretaría de Medio Ambiente y Desarrollo Sostenible,Secretaria
+B_REDVITAB_ASSII,Elizabeth Mar Juárez,emar@imp.mx,REDVITAB,Instituto Mexicano del Petróleo,Directora General
+B_REDVITAB_ASSII,Darvin Daniel González Baños,rectoria@utusumacinta.edu.mx,REDVITAB,Universidad Tecnológica del Usumacinta,Rector
+B_REDVITAB_ASSII,Emilio Alberto De Ygartua Monteverde,rector@olmeca.edu.mx,REDVITAB,Universidad Olmeca,Rector
+B_REDVITAB_ASSII,Mireya Balboa Cano,sub_admon@regionsierratecnm.mx,REDVITAB,"Tecnológico Nacional de México, Campus Región Sierra",Directora General
+B_REDVITAB_ASSII,Mari Carmen Bravo Guzmán,dir_dlosrios@tecnm.mx,REDVITAB,"Tecnológico Nacional de México, Campus Los Ríos",Directora General
+B_REDVITAB_ASSII,Mayra Liz Barrios Viñas,dir_chontalpa@tecnm.mx,REDVITAB,"Tecnológico Nacional de México, Campus Chontalpa",Directora General
+B_REDVITAB_ASSII,Guadalupe Arias Acopa,direccion@cecytab.edu.mx,REDVITAB,Colegio de Estudios Científicos y Tecnológicos del Estado de Tabasco,Director General
+B_REDVITAB_ASSII,Raúl Guzmán Priego,contacto@ccet.org.mx,REDVITAB,Consejo Coordinador Empresarial de Tabasco,Presidente
+B_REDVITAB_ASSII,GERARDO PALOMEQUE CRUZ,gerardo.palomeque@gmail.com,ASSII,ASSII,
+B_REDVITAB_ASSII,MARIA LUISA VENTURA JUÁREZ,mariven21@hotmail.com,ASSII,ASSII,
+B_REDVITAB_ASSII,SHAAYDALY RUIZ CASTILLO,shaayda04@gmail.com,ASSII,ASSII,
+B_REDVITAB_ASSII,ALEJANDRA GUTIERREZ JUAREZ,alegutierrez22@gmail.com,ASSII,ASSII,
+B_REDVITAB_ASSII,GERARDO GOMEZ DE LA CRUZ,gerardo_gomez79@hotmail.com,ASSII,ASSII,
+B_REDVITAB_ASSII,LAURA VIDAL REYES,mc.lavire@gmail.com,ASSII,ASSII,
+B_REDVITAB_ASSII,CARLOS ANDRES ZAPATA TORRES,carloszapatamty@hotmail.com,ASSII,ASSII,
+B_REDVITAB_ASSII,ERNESTO RODRÍGUEZ TORRES,earodrig35@gmail.com,ASSII,ASSII,
+B_REDVITAB_ASSII,JUAN CARLOS LOPEZ PRIEGO,sgintegral23@gmail.com,ASSII,ASSII,
+B_REDVITAB_ASSII,HELMER HERRERA DE LOS SANTOS,memosan@gmail.com,ASSII,ASSII,
+B_REDVITAB_ASSII,SANDY RODRIGUEZ REYES,rodrsan2013@gmail.com,ASSII,ASSII,
+B_REDVITAB_ASSII,FREDDY ARTURO RODRIGUEZ LANZ,freddylanz2618@gmail.com,ASSII,ASSII,
+B_REDVITAB_ASSII,FRANCISCO OLVERA HERNÁNDEZ,francisco.olvera5480@gmail.com,ASSII,ASSII,
+B_REDVITAB_ASSII,JOSÉ TRINIDAD GONZÁLEZ MENDOZA,trino.glezm@gmail.com,ASSII,ASSII,
+B_REDVITAB_ASSII,JANET MARGARITA PALMA VILLANUEVA,jpalmvil@gmail.com,ASSII,ASSII,
+B_REDVITAB_ASSII,ALEJANDRA CASTAÑEDA LEON,caleja35@gmail.con,ASSII,ASSII,
+B_REDVITAB_ASSII,RUBĖN ANDRĖS ESCUDERO DE LOS SANTOS,andres_2531@hotmail.com,ASSII,ASSII,
+B_REDVITAB_ASSII,JUAN FRANCISCO GONZÁLEZ ALEJO,jjffggaa@gmail.com,ASSII,ASSII,
+B_REDVITAB_ASSII,ALEJANDRA GUADALUPE IRIS AGUILERA,aleirisag@gmail.com,ASSII,ASSII,
+EXCLUIDO_EMAIL_INVALIDO,JUAN PABLO HERRERA COLORADO,herreracolorado14gmail.com,ASSII,ASSII,
+B_REDVITAB_ASSII,ZINATH JAVIER GERONIMO,zijage@gmail.com,ASSII,ASSII,
+EXCLUIDO_EMAIL_INVALIDO,JOSÉ VENTURA DOMÍNGUEZ FUENTES,dofv700406htcmnn06,ASSII,ASSII,
+EXCLUIDO_EMAIL_INVALIDO,SERGIO ALONSO HERNANDEZ SANCHEZ,hess801228htcrnr05,ASSII,ASSII,
+EXCLUIDO_EMAIL_INVALIDO,JORGE ARTEMIO LÓPEZ GONZÁLEZ,logj750606htcpnr09,ASSII,ASSII,
+EXCLUIDO_EMAIL_INVALIDO,AURELIO ALEXANDER DE LA O ARGAEZ,oxaa810819htcxrr04,ASSII,ASSII,
+EXCLUIDO_EMAIL_INVALIDO,JOSE MANUEL ROMERO GÓMEZ,rogm800830,ASSII,ASSII,
+EXCLUIDO_EMAIL_INVALIDO,JORGE ALBERTO GALÁN MONTERO,gamj791102hvzlnr02,ASSII,ASSII,
+EXCLUIDO_EMAIL_INVALIDO,FABIÁN SASTRÉ DE DIOS,sadf960822htcssb03,ASSII,ASSII,
+EXCLUIDO_EMAIL_INVALIDO,JESÚS GUADALUPE CASTILLO XICOTÉNCATL,caxj901211htcscs08,ASSII,ASSII,
+B_REDVITAB_ASSII,ALFONSO QUIROZ SOLÍS,alfonso.quiroz@pemex.com,ASSII,ASSII,
+B_REDVITAB_ASSII,MARCO ANTONIO ABID BECERRA,marco.abid@gmail.com,ASSII,ASSII,
+B_REDVITAB_ASSII,MITCHELLE ROSELLÓ OSORIO,michelle-rosello@hotrmail.com,ASSII,ASSII,
+B_REDVITAB_ASSII,ALEJANDRA GUZMÁN LARA,aleguzlar@hotmail.com,ASSII,ASSII,
+B_REDVITAB_ASSII,JUAN MANUEL FLORES GALICIA,jflores@cesigsa.com,ASSII,ASSII,
+B_REDVITAB_ASSII,ALEJANDRO JIMÉNEZ QUEVEDO,alejandrojimenezq@hotmail.com,ASSII,ASSII,
+B_REDVITAB_ASSII,ALEJANDRO BARRIGUETE BORRELL,online.abborrell@gmail.com,ASSII,ASSII,
+EXCLUIDO_EMAIL_INVALIDO,ESTEBAN FABIAN SANCHEZ,cortazar,ASSII,ASSII,
+EXCLUIDO_SIN_ORIGEN,Valente Flores,valente.contacto@gmail.com,,,
