@@ -22,6 +22,7 @@ export default function ResponseDetail() {
   const cameFrom = location.state?.from === "students" ? "students" : "responses"
 
   const [student, setStudent] = useState<Student | null>(null)
+  const [formFields, setFormFields] = useState<Array<{ name: string; label: string }>>([])
   const [loading, setLoading] = useState(true)
   const [enrolling, setEnrolling] = useState(false)
   const [alreadyEnrolled, setAlreadyEnrolled] = useState(false)
@@ -32,6 +33,12 @@ export default function ResponseDetail() {
       try {
         const s = await pb.collection("students").getOne<Student>(studentId)
         setStudent(s)
+
+        const forms = await pb
+          .collection("forms")
+          .getList<{ id: string; fields: Array<{ name: string; label: string }> }>(1, 1000, {})
+        const form = forms.items.find((f) => f.fields?.length > 0) || forms.items[0]
+        setFormFields(form?.fields ?? [])
 
         const enrollments = await pb.collection("enrollments").getList(1, 10, {
           filter: `studentId="${studentId}"`,
@@ -85,24 +92,6 @@ export default function ResponseDetail() {
     }
   }
 
-  const formFields = [
-    { key: "nombre_completo", label: "Nombre completo" },
-    { key: "correo_electronico", label: "Correo electrónico" },
-    { key: "telefono", label: "Teléfono" },
-    { key: "empresa", label: "Empresa / Organización" },
-    { key: "puesto", label: "Puesto / Cargo" },
-    { key: "nivel_estudios", label: "Nivel máximo de estudios" },
-    { key: "experiencia_sst", label: "Años de experiencia en SST" },
-    { key: "conocimientos_previos", label: "Conocimientos previos (1-5)" },
-    { key: "motivacion", label: "¿Por qué te interesa este diplomado?" },
-    { key: "expectativas", label: "¿Qué esperas aprender?" },
-    { key: "tipo_participante", label: "Tipo de participante" },
-    { key: "areas_interes", label: "Áreas de interés" },
-    { key: "como_se_entero", label: "¿Cómo se enteró?" },
-    { key: "factura", label: "¿Requiere factura?" },
-    { key: "comentarios", label: "Comentarios adicionales" },
-  ]
-
   if (loading) return <div className="p-8 text-center text-muted-foreground">Cargando...</div>
   if (!student) return null
 
@@ -145,9 +134,9 @@ export default function ResponseDetail() {
           <h2 className="mb-4 font-sora text-lg font-semibold">Respuestas del formulario</h2>
           <dl className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {formFields.map((field) => (
-              <div key={field.key} className="rounded-lg bg-muted/30 p-3">
+              <div key={field.name} className="rounded-lg bg-muted/30 p-3">
                 <dt className="mb-1 text-xs font-medium text-muted-foreground">{field.label}</dt>
-                <dd className="text-sm">{getField(field.key)}</dd>
+                <dd className="text-sm">{getField(field.name)}</dd>
               </div>
             ))}
           </dl>
