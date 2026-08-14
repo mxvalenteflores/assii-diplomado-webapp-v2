@@ -94,15 +94,28 @@ const TEMARIO: Modulo[] = [
       {
         fecha: ["Domingo 04 de octubre"],
         instructores: ["Michelle Roselló Osorio", "Luis Alberto Beltrán Arias"],
-        temas: ["Servicios preventivos de SST.", "Registro Estadístico de Riesgos de Trabajo"],
+        temas: [
+          "Servicios preventivos de SST",
+          "Registro Estadístico de Riesgos de Trabajo",
+          "Comisiones de Seguridad e Higiene",
+        ],
       },
       {
         fecha: ["Domingo 11 de octubre"],
         instructores: ["Cesar Ponce Patiño", "Adrián Esteban Díaz Romero"],
-        temas: ["Comisiones de Seguridad e Higiene", "Diagnóstico y Evaluación de SST para la Autogestión"],
+        temas: ["Diagnóstico y Evaluación de SST para la Autogestión"],
       },
       {
-        fecha: ["Domingo 18 de octubre", "Domingo 25 de octubre"],
+        fecha: ["Domingo 18 de octubre"],
+        instructores: ["Alejandro Barriguete", "Mario Gil"],
+        temas: [
+          "Análisis de Riesgos en las Organizaciones",
+          "Programas Internos de Protección Civil",
+          "Sistemas Integrados de Gestión",
+        ],
+      },
+      {
+        fecha: ["Domingo 25 de octubre"],
         instructores: ["Alejandro Barriguete", "Mario Gil"],
         temas: [
           "Análisis de Riesgos en las Organizaciones",
