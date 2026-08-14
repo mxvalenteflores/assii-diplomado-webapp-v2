@@ -89,7 +89,7 @@ if [ "$EXISTING_DIP" = "0" ]; then
       "slug":"competencias-gerenciales-sst",
       "modality":"Online en vivo",
       "duration":"120 horas",
-      "dates":"Septiembre - Diciembre 2026",
+      "dates":"Agosto - Noviembre 2026",
       "investment":5000
     }' | python3 -c "import sys,json; print(json.load(sys.stdin).get('id',''))" 2>/dev/null)
   echo "Diplomado: $DIP_ID"

@@ -303,7 +303,7 @@ export default function FormPage() {
             <ul className="list-disc pl-4 space-y-0.5">
               <li>Modalidad: En línea, sincrónico (Google Meet).</li>
               <li>Duración: 12 semanas.</li>
-              <li>Sesiones: Domingos del 16 de Agosto al 08 de Noviembre de 2026 de 9:00 a 14:00 hrs.</li>
+              <li>Sesiones: Domingos del 23 de Agosto al 15 de Noviembre de 2026 de 9:00 a 14:00 hrs.</li>
               <li>Inversión del programa: $10,000.00 MXN (sujeto a esquemas de pago único con descuento o parcialidades según corresponda).</li>
             </ul>
             <p>
