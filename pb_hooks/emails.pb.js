@@ -1,11 +1,14 @@
 /// <reference path="./pb_data/lib.d.ts" />
 
-console.log("[HOOKS] Loading email hooks v4")
+console.log("[HOOKS] Loading email hooks v5 — Resend")
+
+var RESEND_URL = "https://api.resend.com/emails"
+var FROM = "ASSII Diplomados <contacto@diplomadosassii.site>"
 
 onRecordAfterCreateSuccess(function(e) {
   var record = e.record
   var colName = record.collection() ? record.collection().name : ""
-  var key = $os.getenv("AGENTMAIL_API_KEY") || ""
+  var key = $os.getenv("RESEND_API_KEY") || ""
 
   if (colName === "students") {
     var formData = record.get("formData")
@@ -46,9 +49,27 @@ onRecordAfterCreateSuccess(function(e) {
           ? "<p style=\"color:#374151;font-size:14px;line-height:1.6;margin:0 0 8px\"><strong>Pagos Únicos:</strong> Deberán ser cubiertos en su totalidad a más tardar 3 días hábiles antes del inicio del Diplomado para garantizar su acceso a la plataforma.</p>"
           : "<p style=\"color:#374151;font-size:14px;line-height:1.6;margin:0 0 8px\"><strong>Esquema de Parcialidades (6 meses):</strong></p><p style=\"color:#374151;font-size:14px;line-height:1.6;margin:0 0 8px\">El primer pago (Inscripción/Mensualidad 1) debe realizarse antes del inicio del Diplomado.</p><p style=\"color:#374151;font-size:14px;line-height:1.6;margin:0 0 8px\">Las 3 parcialidades restantes deberán cubrirse durante los primeros 5 días naturales de cada mes subsecuente.</p>"
 
-        var linkHtml = ""
-        if (paymentLink) {
-          linkHtml = "<p style=\"color:#374151;font-size:14px;line-height:1.6;margin:0 0 8px\"><strong>Link de pago:</strong> <a href=\"" + paymentLink + "\" style=\"color:#1e40af;font-weight:600\">" + paymentLink + "</a></p>"
+        var msiButtonHtml = ""
+        if (paymentType === "parcialidades" && paymentLink) {
+          var btnLabel = (s.indexOf("assii") !== -1 || s.indexOf("comunidad") !== -1)
+            ? "Pagar con 6 meses sin intereses (25% descuento)"
+            : "Pagar con 6 meses sin intereses (precio regular)"
+          msiButtonHtml = "<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"margin-top:12px;margin-bottom:8px\"><tr><td align=\"center\">" +
+            "<a href=\"" + paymentLink + "\" style=\"display:inline-block;background-color:#16a34a;color:#ffffff;font-size:15px;font-weight:700;padding:16px 36px;border-radius:8px;text-decoration:none;text-align:center\">" + btnLabel + "</a>" +
+            "</td></tr></table>"
+        }
+
+        var bankDetailsHtml = ""
+        if (paymentType === "unico") {
+          bankDetailsHtml = "<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#f0fdf4;border-radius:8px;border:1px solid #bbf7d0;margin-bottom:20px\"><tr><td style=\"padding:20px\">" +
+            "<p style=\"color:#15803d;font-size:15px;font-weight:700;margin:0 0 8px\">II. Datos Bancarios</p>" +
+            "<p style=\"color:#374151;font-size:13px;line-height:1.6;margin:0 0 4px\">Todos los cobros y la administracion estan a cargo de <strong>ISIBSA mx</strong>.</p>" +
+            "<p style=\"color:#374151;font-size:13px;line-height:1.6;margin:0 0 4px\"><strong>Beneficiario:</strong> Alejandro Barriguete Borrell</p>" +
+            "<p style=\"color:#374151;font-size:13px;line-height:1.6;margin:0 0 4px\"><strong>Banco:</strong> Scotiabank Inverlat, S.A.</p>" +
+            "<p style=\"color:#374151;font-size:13px;line-height:1.6;margin:0 0 4px\"><strong>Tarjeta:</strong> 5579 2091 5724 9431</p>" +
+            "<p style=\"color:#374151;font-size:13px;line-height:1.6;margin:0 0 4px\"><strong>CLABE:</strong> 044790256062122910</p>" +
+            "<p style=\"color:#374151;font-size:13px;line-height:1.6;margin:0\"><strong>Concepto:</strong> Nombre completo + ASSII_DCG_GSST_A_2026</p>" +
+            "</td></tr></table>"
         }
 
         var html = "<!DOCTYPE html><html lang=\"es\"><head><meta charset=\"UTF-8\"></head>" +
@@ -67,19 +88,10 @@ onRecordAfterCreateSuccess(function(e) {
 "<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#f0f9ff;border-radius:8px;border:1px solid #bae6fd;margin-bottom:20px\"><tr><td style=\"padding:20px\">" +
 "<p style=\"color:#0369a1;font-size:15px;font-weight:700;margin:0 0 8px\">I. Términos y Condiciones de Inversión</p>" +
 "<p style=\"color:#374151;font-size:14px;line-height:1.6;margin:0 0 8px\">De acuerdo con su registro, su esquema de inversión elegido es: <strong style=\"color:#1e40af\">" + pn + "</strong> por un monto de <strong style=\"color:#1e40af\">" + pa + "</strong>.</p>" +
-tipoPagoText + linkHtml +
+tipoPagoText + msiButtonHtml +
 "<p style=\"color:#374151;font-size:14px;line-height:1.6;margin:0\"><strong>Nota de cumplimiento:</strong> El atraso en el pago de una parcialidad causará la suspensión temporal del acceso a las sesiones sincrónicas y al material del diplomado hasta regularizar el estatus.</p>" +
 "</td></tr></table>" +
-// II. Datos bancarios
-"<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#f0fdf4;border-radius:8px;border:1px solid #bbf7d0;margin-bottom:20px\"><tr><td style=\"padding:20px\">" +
-"<p style=\"color:#15803d;font-size:15px;font-weight:700;margin:0 0 8px\">II. Datos Bancarios</p>" +
-"<p style=\"color:#374151;font-size:13px;line-height:1.6;margin:0 0 4px\">Todos los cobros y la administración están a cargo de <strong>ISIBSA mx</strong>.</p>" +
-"<p style=\"color:#374151;font-size:13px;line-height:1.6;margin:0 0 4px\"><strong>Beneficiario:</strong> Alejandro Barriguete Borrell</p>" +
-"<p style=\"color:#374151;font-size:13px;line-height:1.6;margin:0 0 4px\"><strong>Banco:</strong> Scotiabank Inverlat, S.A.</p>" +
-"<p style=\"color:#374151;font-size:13px;line-height:1.6;margin:0 0 4px\"><strong>Tarjeta:</strong> 5579 2091 5724 9431</p>" +
-"<p style=\"color:#374151;font-size:13px;line-height:1.6;margin:0 0 4px\"><strong>CLABE:</strong> 044790256062122910</p>" +
-"<p style=\"color:#374151;font-size:13px;line-height:1.6;margin:0\"><strong>Concepto:</strong> Nombre completo + ASSII_DCG_GSST_A_2026</p>" +
-"</td></tr></table>" +
+bankDetailsHtml +
 // III. Facturación
 "<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#fefce8;border-radius:8px;border:1px solid #fde68a;margin-bottom:20px\"><tr><td style=\"padding:20px\">" +
 "<p style=\"color:#a16207;font-size:15px;font-weight:700;margin:0 0 8px\">III. Políticas de Facturación (CFDI 4.0)</p>" +
@@ -102,10 +114,10 @@ tipoPagoText + linkHtml +
         var plainText = "Estimado/a " + name + ",\n\nBienvenido al Diplomado GSST. Esquema: " + paymentName + " por " + paymentAmount + ".\n\nEquipo ASSII"
 
         $http.send({
-          url: "https://api.agentmail.to/v0/inboxes/arqonlabs%40agentmail.to/messages/send",
+          url: RESEND_URL,
           method: "POST",
-          headers: { Authorization: "Bearer " + key, "Content-Type": "application/json" },
-          body: JSON.stringify({ to: email, subject: subject, text: plainText, html: html }),
+          headers: { Authorization: "Bearer " + key, "Content-Type": "application/json", "User-Agent": "assii/1.0" },
+          body: JSON.stringify({ from: FROM, to: [email], subject: subject, text: plainText, html: html }),
         })
         console.log("[EMAIL SENT] welcome to", email)
       } catch (err) {
@@ -118,10 +130,10 @@ tipoPagoText + linkHtml +
         for (var ai = 0; ai < admins.length; ai++) {
           try {
             $http.send({
-              url: "https://api.agentmail.to/v0/inboxes/arqonlabs%40agentmail.to/messages/send",
+              url: RESEND_URL,
               method: "POST",
-              headers: { Authorization: "Bearer " + key, "Content-Type": "application/json" },
-              body: JSON.stringify({ to: admins[ai].get("email"), subject: "Nueva inscripción", text: (name || "Alguien") + " se ha inscrito. Esquema: " + paymentName }),
+              headers: { Authorization: "Bearer " + key, "Content-Type": "application/json", "User-Agent": "assii/1.0" },
+              body: JSON.stringify({ from: FROM, to: [admins[ai].get("email")], subject: "Nueva inscripcion", text: (name || "Alguien") + " se ha inscrito. Esquema: " + paymentName }),
             })
           } catch (_) {}
         }
@@ -135,7 +147,7 @@ onRecordAfterUpdateSuccess(function(e) {
   var colName = record.collection() ? record.collection().name : ""
   if (colName !== "payments") return
 
-  var key = $os.getenv("AGENTMAIL_API_KEY") || ""
+  var key = $os.getenv("RESEND_API_KEY") || ""
   var status = record.get("status")
   var enrollmentId = record.get("enrollmentId")
 
@@ -154,18 +166,18 @@ onRecordAfterUpdateSuccess(function(e) {
 
     if (status === "VALIDATED") {
       $http.send({
-        url: "https://api.agentmail.to/v0/inboxes/arqonlabs%40agentmail.to/messages/send",
+        url: RESEND_URL,
         method: "POST",
-        headers: { Authorization: "Bearer " + key, "Content-Type": "application/json" },
-        body: JSON.stringify({ to: sEmail, subject: "Pago validado", text: "Hola " + sName + ",\n\nTu pago ha sido validado. Ya tienes acceso al diplomado.\n\nEquipo ASSII" }),
+        headers: { Authorization: "Bearer " + key, "Content-Type": "application/json", "User-Agent": "assii/1.0" },
+        body: JSON.stringify({ from: FROM, to: [sEmail], subject: "Pago validado", text: "Hola " + sName + ",\n\nTu pago ha sido validado. Ya tienes acceso al diplomado.\n\nEquipo ASSII" }),
       })
     } else if (status === "REJECTED") {
       var reason = record.get("rejectionReason") || "No especificado"
       $http.send({
-        url: "https://api.agentmail.to/v0/inboxes/arqonlabs%40agentmail.to/messages/send",
+        url: RESEND_URL,
         method: "POST",
-        headers: { Authorization: "Bearer " + key, "Content-Type": "application/json" },
-        body: JSON.stringify({ to: sEmail, subject: "Pago rechazado", text: "Hola " + sName + ",\n\nTu comprobante ha sido rechazado.\nMotivo: " + reason + "\n\nEquipo ASSII" }),
+        headers: { Authorization: "Bearer " + key, "Content-Type": "application/json", "User-Agent": "assii/1.0" },
+        body: JSON.stringify({ from: FROM, to: [sEmail], subject: "Pago rechazado", text: "Hola " + sName + ",\n\nTu comprobante ha sido rechazado.\nMotivo: " + reason + "\n\nEquipo ASSII" }),
       })
     }
   } catch (_) {}

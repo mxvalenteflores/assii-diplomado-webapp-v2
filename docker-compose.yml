@@ -6,7 +6,7 @@ services:
     volumes:
       - pb_data:/pb/pb_data
     environment:
-      - AGENTMAIL_API_KEY=am_us_1a96c3614432092d8f4569675a8fa30d6ad80eaef38843433a3f06426bbb51f2
+      - RESEND_API_KEY=${RESEND_API_KEY:-}
       - PB_S3_ENDPOINT=https://a4cfe5819f278c8c5d8fd6b5dcffc8ce.r2.cloudflarestorage.com
       - PB_S3_BUCKET=arqonlabs-assii-diplomados
       - PB_S3_REGION=auto

@@ -6,6 +6,7 @@
 > status: vivo
 
 ## Ultimos cambios
+- 2026-08-06 23:02 — **Migracion AgentMail → Resend.** Dominio `diplomadosassii.site` verificado en Resend (DKIM + SPF + MX). emails.pb.js v5 usa Resend API (`RESEND_API_KEY`). From: `notificaciones@diplomadosassii.site`. DNS: DKIM `resend._domainkey`, SPF/MX en `send`. MX en Hostinger requiere priority en content: `"10 feedback-smtp..."` (no hay campo priority en la API).
 - 2026-08-03 09:30 — **Persistence fix.** Data survives redeploys. Litestream auto-restore (R2 backup) + seed adds created/updated autodate fields on startup. `getFullList` replaced with `getList` to bypass PocketBase `skipTotal=1` 400 bug. Toast errors removed on page load.
 - 2026-08-03 06:00 — R2 file storage configurado en PocketBase (Settings > Files). Litestream integrado en Dockerfile (backups cada 15min a R2, retention 30d).
 - 2026-08-03 06:00 — Campo `proof` (file) agregado a coleccion payments via PocketBase Admin API. Frontend actualizado (proofUrl -> proof).
@@ -34,7 +35,7 @@
 ## Credenciales (sin valores)
 - coolify: pass coolify/api-token
 - hostinger: pass hostinger/api-token
-- agentmail: arqonlabs@agentmail.to, API key en Dockerfile y hooks
+- resend: pass projects/assii-diplomado/resend-api-key | dominio verificado: diplomadosassii.site (from: notificaciones@)
 - pocketbase admin: arqonlabshq@gmail.com
 - r2: pass projects/assii-diplomado/r2-*
 
