@@ -24,6 +24,118 @@ interface Diplomado {
 const WHATSAPP_NUMBER = "529934618242"
 const WHATSAPP_MESSAGE = "Hola, acabo de responder el formulario de inscripcion."
 
+interface Sesion {
+  fecha: string[]
+  instructores: string[]
+  temas: string[]
+}
+
+interface Modulo {
+  numeral: string
+  titulo: string
+  sesiones: Sesion[]
+}
+
+const TEMARIO: Modulo[] = [
+  {
+    numeral: "I",
+    titulo: "FUNDAMENTOS DE LA SEGURIDAD Y LA SALUD EN EL TRABAJO.",
+    sesiones: [
+      {
+        fecha: ["Domingo 23 de agosto"],
+        instructores: ["Alejandro Barriguete", "Mario Gil"],
+        temas: ["Antecedentes", "Conceptos Básicos", "Estructura de Trabajo Final"],
+      },
+    ],
+  },
+  {
+    numeral: "II",
+    titulo: "MARCO NORMATIVO DE LA SEGURIDAD Y LA SALUD EN EL TRABAJO.",
+    sesiones: [
+      {
+        fecha: ["Domingo 30 de agosto"],
+        instructores: ["Luis Alberto Beltrán Arias", "Luis Alberto Rodríguez Palafox"],
+        temas: ["Marco Normativo Nacional", "Convenios y Tratados", "Normas Internacionales"],
+      },
+    ],
+  },
+  {
+    numeral: "III",
+    titulo: "SEGURIDAD EN EL TRABAJO.",
+    sesiones: [
+      {
+        fecha: ["Domingo 06 de septiembre", "Domingo 13 de septiembre"],
+        instructores: ["Luis Alberto Rodríguez Palafox", "Michelle Roselló Osorio"],
+        temas: ["Instalaciones", "Maquinaria", "Actividades de Riesgo"],
+      },
+    ],
+  },
+  {
+    numeral: "IV",
+    titulo: "SALUD EN EL TRABAJO.",
+    sesiones: [
+      {
+        fecha: ["Domingo 20 de septiembre", "Domingo 27 de septiembre"],
+        instructores: ["Cesar Ponce Patiño", "Adrián Esteban Díaz Romero"],
+        temas: [
+          "Agentes Químicos",
+          "Agentes Físicos",
+          "Agentes Biológicos",
+          "Factores de Riesgo Psicosocial",
+          "Factores de Riesgo Ergonómico",
+        ],
+      },
+    ],
+  },
+  {
+    numeral: "V",
+    titulo: "GESTIÓN DE LA SEGURIDAD Y LA SALUD EN EL TRABAJO.",
+    sesiones: [
+      {
+        fecha: ["Domingo 04 de octubre"],
+        instructores: ["Michelle Roselló Osorio", "Luis Alberto Beltrán Arias"],
+        temas: ["Servicios preventivos de SST.", "Registro Estadístico de Riesgos de Trabajo"],
+      },
+      {
+        fecha: ["Domingo 11 de octubre"],
+        instructores: ["Cesar Ponce Patiño", "Adrián Esteban Díaz Romero"],
+        temas: ["Comisiones de Seguridad e Higiene", "Diagnóstico y Evaluación de SST para la Autogestión"],
+      },
+      {
+        fecha: ["Domingo 18 de octubre", "Domingo 25 de octubre"],
+        instructores: ["Alejandro Barriguete", "Mario Gil"],
+        temas: [
+          "Análisis de Riesgos en las Organizaciones",
+          "Programas Internos de Protección Civil",
+          "Sistemas Integrados de Gestión",
+        ],
+      },
+    ],
+  },
+  {
+    numeral: "VI",
+    titulo: "GESTIÓN TECNOLÓGICA CON PERSPECTIVA DE SEGURIDAD Y SALUD EN EL TRABAJO",
+    sesiones: [
+      {
+        fecha: ["Domingo 01 de noviembre"],
+        instructores: ["Alejandro Barriguete", "Mario Gil"],
+        temas: ["Internet de las cosas", "Inteligencia artificial"],
+      },
+    ],
+  },
+  {
+    numeral: "VII",
+    titulo: "PROYECTO INTEGRAL DE SEGURIDAD Y SALUD EN EL TRABAJO (TRABAJO RECEPCIONAL)",
+    sesiones: [
+      {
+        fecha: ["Domingo 08 de noviembre"],
+        instructores: ["Todos"],
+        temas: ["Revisión", "Presentación"],
+      },
+    ],
+  },
+]
+
 export default function FormPage() {
   const { diplomado } = useParams<{ diplomado: string }>()
   const [form, setForm] = useState<FormConfig | null>(null)
@@ -297,15 +409,70 @@ export default function FormPage() {
 
       <main className="mx-auto max-w-3xl p-6">
         <div className="mb-8">
-          <h2 className="font-sora text-2xl font-bold">{form.title}</h2>
-          <div className="mt-3 space-y-1 text-sm text-muted-foreground">
-            <p>Bienvenido al registro oficial para su inscripción al Diplomado.</p>
-            <ul className="list-disc pl-4 space-y-0.5">
-              <li>Modalidad: En línea, sincrónico (Google Meet).</li>
-              <li>Duración: 12 semanas.</li>
-              <li>Sesiones: Domingos del 23 de Agosto al 15 de Noviembre de 2026 de 9:00 a 14:00 hrs.</li>
-              <li>Inversión del programa: $10,000.00 MXN (sujeto a esquemas de pago único con descuento o parcialidades según corresponda).</li>
-            </ul>
+          <h2 className="font-sora text-2xl font-bold">
+            Diplomado en Competencias Gerenciales para la Gestión de la Seguridad y Salud en el Trabajo
+          </h2>
+
+          <div className="mt-4 space-y-4 text-sm text-muted-foreground">
+            <div>
+              <h3 className="font-semibold text-foreground">Objetivo del diplomado</h3>
+              <p className="mt-1">
+                Desarrollar competencias en el personal de alta y media gerencia en materia de
+                seguridad y salud en el trabajo, asegurando el cumplimiento normativo de manera
+                práctica y sistemática, y creando así entornos laborales seguros y saludables,
+                sincronizando el Marco Normativo Nacional con la Normatividad Internacional.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-foreground">Dirigido a</h3>
+              <p className="mt-1">
+                Personal de alta y media gerencia y coordinaciones de Seguridad y Salud en el
+                Trabajo en empresas e instituciones públicas de todos los giros; profesionistas con
+                enfoque laboral en esta materia; personal operativo y dirigencias sindicales
+                responsables del seguimiento de la seguridad y salud en el trabajo de sus agremiados.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-foreground">Modalidad</h3>
+              <p className="mt-1">
+                En línea sincrónica. Las sesiones (5 horas) se llevarán a cabo en tiempo real con los
+                instructores a través de la plataforma Google Meet, con actividades asincrónicas y
+                espacios para la resolución de dudas.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-foreground">Requerimientos técnicos</h3>
+              <p className="mt-1">
+                Computadora, tableta o teléfono celular con cámara y acceso estable a internet.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-foreground">Duración</h3>
+              <p className="mt-1">12 semanas, del 09 de agosto al 25 de octubre</p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-foreground">Inversión del programa</h3>
+              <p className="mt-1 font-semibold text-foreground">$10,000.00</p>
+              <div className="mt-1 space-y-1">
+                <p className="font-medium text-foreground">Descuento 25%</p>
+                <p>Afiliados, Estudiantes y Egresados de Instituciones con convenio ASSII.</p>
+                <p>Empresas, Sindicatos e Instituciones participantes del COCOESST y REDVITAB.</p>
+                <p className="text-xs">*Detalles en la página https://diplomadosassii.site/</p>
+              </div>
+              <div className="mt-2 space-y-1">
+                <p className="font-medium text-foreground">Entrega de reconocimientos</p>
+                <p>Tercera semana de noviembre (Reunión COCOESST)*</p>
+                <p className="text-xs">
+                  *Es necesario haber cubierto la totalidad del diplomado para recibir documentación.
+                </p>
+              </div>
+            </div>
+
             <p>
               Puede consultar nuestro aviso de privacidad en el siguiente enlace:{" "}
               <a
@@ -319,6 +486,34 @@ export default function FormPage() {
             </p>
           </div>
         </div>
+
+        <div className="mb-8">
+          <h3 className="font-sora text-lg font-bold">Temario</h3>
+          <div className="mt-4 space-y-4">
+            {TEMARIO.map((modulo) => (
+              <div key={modulo.numeral} className="rounded-xl border border-border bg-white p-5">
+                <h4 className="font-semibold text-foreground">
+                  {modulo.numeral}. {modulo.titulo}
+                </h4>
+                {modulo.sesiones.map((sesion, i) => (
+                  <div key={i} className="mt-3">
+                    <p className="text-sm font-medium text-primary">{sesion.fecha.join(" y ")}</p>
+                    <p className="text-sm text-muted-foreground">
+                      Instructores: {sesion.instructores.join(", ")}
+                    </p>
+                    <ul className="mt-2 list-disc space-y-0.5 pl-5 text-sm text-muted-foreground">
+                      {sesion.temas.map((tema) => (
+                        <li key={tema}>{tema}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <h3 className="mb-4 font-sora text-lg font-bold">Formulario de Inscripción</h3>
 
         <form
           onSubmit={handleSubmit}

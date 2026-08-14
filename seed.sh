@@ -85,12 +85,12 @@ if [ "$EXISTING_DIP" = "0" ]; then
   echo "Creating diplomado..."
   DIP_ID=$(curl -s -X POST "$PB/api/collections/diplomados/records" -H "$AUTH" -H "Content-Type: application/json" \
     -d '{
-      "name":"Competencias Gerenciales para la Gestion de la SST",
+      "name":"Diplomado en Competencias Gerenciales para la Gestion de la Seguridad y Salud en el Trabajo",
       "slug":"competencias-gerenciales-sst",
-      "modality":"Online en vivo",
-      "duration":"120 horas",
-      "dates":"Agosto - Noviembre 2026",
-      "investment":5000
+      "modality":"En linea sincronica (Google Meet)",
+      "duration":"12 semanas",
+      "dates":"09 de agosto al 25 de octubre",
+      "investment":10000
     }' | python3 -c "import sys,json; print(json.load(sys.stdin).get('id',''))" 2>/dev/null)
   echo "Diplomado: $DIP_ID"
 else
