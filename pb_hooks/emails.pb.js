@@ -34,7 +34,7 @@ onRecordAfterCreateSuccess(function(e) {
         if (s.indexOf("pago unico") !== -1 && s.indexOf("publico") !== -1) {
           paymentName = "Pago único - Público General"; paymentAmount = "$9,000.00 MXN"; paymentType = "unico"
         } else if (s.indexOf("pago unico") !== -1 && s.indexOf("comunidad") !== -1) {
-          paymentName = "Pago único - Comunidad ASSII"; paymentAmount = "$7,000.00 MXN"; paymentType = "unico"
+          paymentName = "Pago único - Comunidad ASSII"; paymentAmount = "$7,125.00 MXN"; paymentType = "unico"
         } else if (s.indexOf("6 meses") !== -1 && s.indexOf("publico") !== -1) {
           paymentName = "6 Meses sin intereses - Público General"; paymentAmount = "$1,667.00 MXN mensuales"; paymentType = "parcialidades"; paymentLink = "https://mpago.la/2ASRrNs"
         } else if (s.indexOf("6 meses") !== -1 && s.indexOf("assii") !== -1) {
