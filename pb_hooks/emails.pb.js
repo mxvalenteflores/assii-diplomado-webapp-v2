@@ -1,14 +1,20 @@
 /// <reference path="./pb_data/lib.d.ts" />
 
-console.log("[HOOKS] Loading email hooks v5 — Resend")
+console.log("[HOOKS] Loading email hooks v6 — Plunk")
 
-var RESEND_URL = "https://api.resend.com/emails"
-var FROM = "ASSII Diplomados <contacto@diplomadosassii.site>"
+var PLUNK_URL = "https://next-api.useplunk.com/v1/send"
+var FROM = { name: "ASSII Diplomados", email: "no-reply@email.arqonlabs.com" }
+var REPLY_TO = "contacto@email.arqonlabs.com"
+
+function toHtml(t) {
+  return '<div style="white-space:pre-wrap;font-family:system-ui,Segoe UI,Arial,sans-serif;font-size:14px;line-height:1.5">' +
+    String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") + '</div>'
+}
 
 onRecordAfterCreateSuccess(function(e) {
   var record = e.record
   var colName = record.collection() ? record.collection().name : ""
-  var key = $os.getenv("RESEND_API_KEY") || ""
+  var key = $os.getenv("PLUNK_SECRET_KEY") || ""
 
   if (colName === "students") {
     var formData = record.get("formData")
@@ -114,10 +120,10 @@ bankDetailsHtml +
         var plainText = "Estimado/a " + name + ",\n\nBienvenido al Diplomado GSST. Esquema: " + paymentName + " por " + paymentAmount + ".\n\nEquipo ASSII"
 
         $http.send({
-          url: RESEND_URL,
+          url: PLUNK_URL,
           method: "POST",
           headers: { Authorization: "Bearer " + key, "Content-Type": "application/json", "User-Agent": "assii/1.0" },
-          body: JSON.stringify({ from: FROM, to: [email], subject: subject, text: plainText, html: html }),
+          body: JSON.stringify({ from: FROM, to: [email], subject: subject, body: html, reply: REPLY_TO }),
         })
         console.log("[EMAIL SENT] welcome to", email)
       } catch (err) {
@@ -130,10 +136,10 @@ bankDetailsHtml +
         for (var ai = 0; ai < admins.length; ai++) {
           try {
             $http.send({
-              url: RESEND_URL,
+              url: PLUNK_URL,
               method: "POST",
               headers: { Authorization: "Bearer " + key, "Content-Type": "application/json", "User-Agent": "assii/1.0" },
-              body: JSON.stringify({ from: FROM, to: [admins[ai].get("email")], subject: "Nueva inscripcion", text: (name || "Alguien") + " se ha inscrito. Esquema: " + paymentName }),
+              body: JSON.stringify({ from: FROM, to: [admins[ai].get("email")], subject: "Nueva inscripcion", body: toHtml((name || "Alguien") + " se ha inscrito. Esquema: " + paymentName), reply: REPLY_TO }),
             })
           } catch (_) {}
         }
@@ -147,7 +153,7 @@ onRecordAfterUpdateSuccess(function(e) {
   var colName = record.collection() ? record.collection().name : ""
   if (colName !== "payments") return
 
-  var key = $os.getenv("RESEND_API_KEY") || ""
+  var key = $os.getenv("PLUNK_SECRET_KEY") || ""
   var status = record.get("status")
   var enrollmentId = record.get("enrollmentId")
 
@@ -166,18 +172,18 @@ onRecordAfterUpdateSuccess(function(e) {
 
     if (status === "VALIDATED") {
       $http.send({
-        url: RESEND_URL,
+        url: PLUNK_URL,
         method: "POST",
         headers: { Authorization: "Bearer " + key, "Content-Type": "application/json", "User-Agent": "assii/1.0" },
-        body: JSON.stringify({ from: FROM, to: [sEmail], subject: "Pago validado", text: "Hola " + sName + ",\n\nTu pago ha sido validado. Ya tienes acceso al diplomado.\n\nEquipo ASSII" }),
+        body: JSON.stringify({ from: FROM, to: [sEmail], subject: "Pago validado", body: toHtml("Hola " + sName + ",\n\nTu pago ha sido validado. Ya tienes acceso al diplomado.\n\nEquipo ASSII"), reply: REPLY_TO }),
       })
     } else if (status === "REJECTED") {
       var reason = record.get("rejectionReason") || "No especificado"
       $http.send({
-        url: RESEND_URL,
+        url: PLUNK_URL,
         method: "POST",
         headers: { Authorization: "Bearer " + key, "Content-Type": "application/json", "User-Agent": "assii/1.0" },
-        body: JSON.stringify({ from: FROM, to: [sEmail], subject: "Pago rechazado", text: "Hola " + sName + ",\n\nTu comprobante ha sido rechazado.\nMotivo: " + reason + "\n\nEquipo ASSII" }),
+        body: JSON.stringify({ from: FROM, to: [sEmail], subject: "Pago rechazado", body: toHtml("Hola " + sName + ",\n\nTu comprobante ha sido rechazado.\nMotivo: " + reason + "\n\nEquipo ASSII"), reply: REPLY_TO }),
       })
     }
   } catch (_) {}
